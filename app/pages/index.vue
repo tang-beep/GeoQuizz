@@ -1,169 +1,18 @@
 <script setup lang="ts">
-import { computed, nextTick, ref } from 'vue'
-
-import { countries } from '../data/countries'
-import type { Country } from '../types/country'
-
-const score = ref(0)
-
-const answer = ref('')
-const result = ref('')
-
-const usedCountries = ref<string[]>([])
-
-const gameFinished = ref(false)
-
-const inputRef = ref<HTMLInputElement | null>(null)
-
-const gameStep = ref<'country' | 'capital' | 'next'>(
-  'country'
-)
-
-function normalizeString(value: string): string {
-  return value
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .trim()
-    .toLowerCase()
-}
-
-function getRemainingCountries(): Country[] {
-  return countries.filter(
-    country => !usedCountries.value.includes(country.code)
-  )
-}
-
-function getRandomCountry(): Country {
-  const remainingCountries = getRemainingCountries()
-
-  if (remainingCountries.length === 0) {
-    gameFinished.value = true
-
-    return countries[0]!
-  }
-
-  return remainingCountries[
-    Math.floor(Math.random() * remainingCountries.length)
-  ]!
-}
-
-const currentCountry = ref<Country>(getRandomCountry())
-
-const placeholder = computed(() => {
-  if (gameStep.value === 'country') {
-    return 'Nom du pays'
-  }
-
-  if (gameStep.value === 'capital') {
-    return 'Capitale'
-  }
-
-  return ''
-})
-
-function focusInput() {
-  nextTick(() => {
-    inputRef.value?.focus()
-  })
-}
-
-function submitCountryAnswer() {
-  const normalizedAnswer = normalizeString(
-    answer.value
-  )
-
-  const normalizedCountry = normalizeString(
-    currentCountry.value.name
-  )
-
-  if (normalizedAnswer === normalizedCountry) {
-    result.value = '✅ Bon pays !'
-    score.value++
-  } else {
-    result.value =
-      `❌ Mauvaise réponse — c'était ${currentCountry.value.name}`
-  }
-
-  answer.value = ''
-
-  gameStep.value = 'capital'
-
-  focusInput()
-}
-
-function submitCapitalAnswer() {
-  const normalizedAnswer = normalizeString(
-    answer.value
-  )
-
-  const normalizedCapital = normalizeString(
-    currentCountry.value.capital
-  )
-
-  if (normalizedAnswer === normalizedCapital) {
-    result.value += '\n✅ Bonne capitale !'
-    score.value++
-  } else {
-    result.value +=
-      `\n❌ Mauvaise capitale — c'était ${currentCountry.value.capital}`
-  }
-
-  usedCountries.value.push(currentCountry.value.code)
-
-  answer.value = ''
-
-  gameStep.value = 'next'
-
-  focusInput()
-}
-
-function nextQuestion() {
-  currentCountry.value = getRandomCountry()
-
-  result.value = ''
-
-  answer.value = ''
-
-  gameStep.value = 'country'
-
-  focusInput()
-}
-
-function restartGame() {
-  score.value = 0
-
-  usedCountries.value = []
-
-  gameFinished.value = false
-
-  answer.value = ''
-
-  result.value = ''
-
-  gameStep.value = 'country'
-
-  currentCountry.value = getRandomCountry()
-
-  focusInput()
-}
-
-function handleEnter() {
-  if (gameFinished.value) {
-    return
-  }
-
-  if (gameStep.value === 'country') {
-    submitCountryAnswer()
-    return
-  }
-
-  if (gameStep.value === 'capital') {
-    submitCapitalAnswer()
-    return
-  }
-
-  nextQuestion()
-}
+const {
+  score,
+  answer,
+  result,
+  usedCountries,
+  gameFinished,
+  inputRef,
+  gameStep,
+  currentCountry,
+  placeholder,
+  handleEnter,
+  restartGame,
+  countries
+} = useGame()
 </script>
 
 <template>
@@ -180,7 +29,9 @@ function handleEnter() {
 
       <p class="mt-2 text-zinc-500">
         Pays joués :
-        {{ usedCountries.length }} / {{ countries.length }}
+        {{ usedCountries.length }}
+        /
+        {{ countries.length }}
       </p>
 
       <button
@@ -192,21 +43,16 @@ function handleEnter() {
 
       <template v-if="!gameFinished">
 
-        <img
-          :key="currentCountry.code"
-          :src="currentCountry.flag"
-          :alt="currentCountry.name"
-          class="mt-12 h-48 rounded-xl shadow-2xl"
-        >
+        <FlagCard
+          :country="currentCountry"
+        />
 
-        <input
-          ref="inputRef"
+        <GameInput
           v-model="answer"
-          type="text"
           :placeholder="placeholder"
-          class="mt-10 w-full max-w-md rounded-xl bg-zinc-800 p-4 text-center text-xl text-white outline-none"
-          @keyup.enter="handleEnter"
-        >
+          :input-ref="inputRef"
+          @enter="handleEnter"
+        />
 
         <p
           class="mt-8 whitespace-pre-line text-center text-xl"
@@ -231,7 +77,9 @@ function handleEnter() {
 
         <p class="mt-6 text-2xl">
           Score final :
-          {{ score }} / {{ countries.length * 2 }}
+          {{ score }}
+          /
+          {{ countries.length * 2 }}
         </p>
 
         <button
