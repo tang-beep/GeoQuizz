@@ -13,7 +13,7 @@ const emit = defineEmits([
 
 <template>
   <input
-    :ref="(el) => inputRef = el as HTMLInputElement"
+    ref="inputRef"
     :value="modelValue"
     type="text"
     :placeholder="placeholder"
@@ -21,7 +21,8 @@ const emit = defineEmits([
     @input="
       emit(
         'update:modelValue',
-        ($event.target as HTMLInputElement).value
+        ($event.target as HTMLInputElement)
+          .value
       )
     "
     @keyup.enter="emit('enter')"

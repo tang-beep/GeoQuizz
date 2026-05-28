@@ -8,8 +8,8 @@ defineProps<{
 
 <template>
   <img
-    :key="country.code"
-    :src="country.flag"
+    :key="`${country.code}-${country.flag}`"
+    :src="`${country.flag}?v=${country.code}`"
     :alt="country.name"
     class="mt-12 h-48 rounded-xl shadow-2xl"
   >

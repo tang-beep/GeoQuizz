@@ -6,90 +6,132 @@ const {
   usedCountries,
   gameFinished,
   inputRef,
-  gameStep,
+  tasks,
+roundFinished,
   currentCountry,
   placeholder,
   handleEnter,
   restartGame,
-  countries
+  countries,
+  correctCountries,
+  revealedCountries,
+  wrongCountry,
+  selectCountry
 } = useGame()
 </script>
 
 <template>
-  <main class="min-h-screen bg-zinc-900 text-white">
-    <div class="mx-auto flex max-w-3xl flex-col items-center p-8">
+  <main class="h-screen bg-zinc-900 text-white">
+    <div class="flex h-full">
 
-      <h1 class="text-5xl font-bold">
-        GeoQuiz
-      </h1>
+      <div class="flex-1 p-4">
+        <WorldMap
+          :current-country-code="
+            currentCountry.code
+          "
+          :correct-countries="
+            correctCountries
+          "
+          :revealed-countries="
+            revealedCountries
+          "
+          :wrong-country="
+            wrongCountry
+          "
+          @select-country="
+            selectCountry
+          "
+        />
+      </div>
 
-      <p class="mt-4 text-zinc-400">
-        Score : {{ score }}
-      </p>
-
-      <p class="mt-2 text-zinc-500">
-        Pays joués :
-        {{ usedCountries.length }}
-        /
-        {{ countries.length }}
-      </p>
-
-      <button
-        class="mt-6 rounded-xl bg-zinc-700 px-6 py-3 hover:bg-zinc-600"
-        @click="restartGame"
+      <div
+        class="flex w-[420px] flex-col border-l border-zinc-800 p-8"
       >
-        Recommencer une partie
-      </button>
 
-      <template v-if="!gameFinished">
+        <h1 class="text-4xl font-bold">
+          GeoQuiz
+        </h1>
 
-        <FlagCard
-          :country="currentCountry"
-        />
-
-        <GameInput
-          v-model="answer"
-          :placeholder="placeholder"
-          :input-ref="inputRef"
-          @enter="handleEnter"
-        />
-
-        <p
-          class="mt-8 whitespace-pre-line text-center text-xl"
-        >
-          {{ result }}
+        <p class="mt-4 text-zinc-400">
+          Score : {{ score }}
         </p>
 
-        <p
-          v-if="gameStep === 'next'"
-          class="mt-6 text-zinc-400"
-        >
-          Appuyez sur Entrée pour continuer
-        </p>
-
-      </template>
-
-      <template v-else>
-
-        <h2 class="mt-12 text-4xl font-bold">
-          Partie terminée 🎉
-        </h2>
-
-        <p class="mt-6 text-2xl">
-          Score final :
-          {{ score }}
+        <p class="mt-2 text-zinc-500">
+          Pays joués :
+          {{ usedCountries.length }}
           /
-          {{ countries.length * 2 }}
+          {{ countries.length }}
         </p>
 
         <button
-          class="mt-8 rounded-xl bg-blue-600 px-6 py-3 font-semibold hover:bg-blue-500"
+          class="mt-6 rounded-xl bg-zinc-700 px-6 py-3 hover:bg-zinc-600"
           @click="restartGame"
         >
-          Rejouer
+          Recommencer
         </button>
 
-      </template>
+        <template v-if="!gameFinished">
+
+          <FlagCard
+            :country="currentCountry"
+          />
+
+          <GameInput
+            v-model="answer"
+            :placeholder="
+              placeholder
+            "
+            :input-ref="inputRef"
+            @enter="handleEnter"
+          />
+
+          <p
+            class="mt-8 whitespace-pre-line text-center text-xl"
+          >
+            {{ result }}
+          </p>
+
+          <p
+            v-if="!tasks.map"
+            class="mt-6 text-center text-zinc-400"
+          >
+            Cliquez sur le pays
+          </p>
+
+          <p
+            v-if="roundFinished"
+            class="mt-6 text-center text-zinc-400"
+          >
+            Appuyez sur Entrée pour continuer
+          </p>
+
+        </template>
+
+        <template v-else>
+
+          <h2
+            class="mt-12 text-4xl font-bold"
+          >
+            Partie terminée 🎉
+          </h2>
+
+          <p class="mt-6 text-2xl">
+            Score final :
+            {{ score }}
+            /
+            {{ countries.length * 3 }}
+          </p>
+
+          <button
+            class="mt-8 rounded-xl bg-blue-600 px-6 py-3 font-semibold hover:bg-blue-500"
+            @click="restartGame"
+          >
+            Rejouer
+          </button>
+
+        </template>
+
+      </div>
 
     </div>
   </main>
