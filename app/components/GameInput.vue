@@ -2,7 +2,6 @@
 defineProps<{
   modelValue: string
   placeholder: string
-  inputRef: HTMLInputElement | null
 }>()
 
 const emit = defineEmits([
@@ -13,11 +12,10 @@ const emit = defineEmits([
 
 <template>
   <input
-    ref="inputRef"
     :value="modelValue"
     type="text"
     :placeholder="placeholder"
-    class="mt-10 w-full max-w-md rounded-xl bg-zinc-800 p-4 text-center text-xl text-white outline-none"
+    class="mt-8 w-full rounded-xl bg-zinc-800 p-4 text-center text-lg text-white outline-none"
     @input="
       emit(
         'update:modelValue',
