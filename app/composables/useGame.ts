@@ -18,6 +18,10 @@ type TaskState =
 export function useGame(
   settings: GameSettings
 ) {
+  const startElement = settings.startElement
+
+  const targetElements = settings.targetElements
+
   function shuffle<T>(array: T[]) {
     return [...array].sort(
       () => Math.random() - 0.5
@@ -381,6 +385,9 @@ export function useGame(
     handleEnter,
     restartGame,
     selectCountry,
-    countries
+    countries,
+
+    startElement,
+    targetElements
   }
 }

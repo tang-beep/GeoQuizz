@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import type { GameSettings } from '../types/game'
+import type {
+  GameElement,
+  GameSettings
+} from '../types/game'
 
 const route = useRoute()
 
@@ -11,7 +14,19 @@ const settings: GameSettings = {
   continent:
     route.query.continent
       ?.toString()
-      .trim() || null
+      .trim() || null,
+
+  startElement:
+    (
+      route.query.start ||
+      'flag'
+    ) as GameElement,
+
+  targetElements:
+    route.query.targets
+      ?.toString()
+      .split(',')
+      .filter(Boolean) as GameElement[]
 }
 
 const {
@@ -28,7 +43,11 @@ const {
   revealedCountries,
   wrongCountry,
   selectCountry,
-  tasks
+  tasks,
+  roundFinished,
+
+  startElement,
+  targetElements
 } = useGame(settings)
 
 function goBackToMenu() {
