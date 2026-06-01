@@ -76,7 +76,7 @@ function startGame() {
 
       </div>
 
-      <div class="mt-10">
+      <div class="mt-6">
 
         <label
           class="text-lg font-semibold"
