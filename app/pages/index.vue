@@ -1,137 +1,137 @@
 <script setup lang="ts">
-const {
-  score,
-  answer,
-  result,
-  usedCountries,
-  gameFinished,
-  inputRef,
-  tasks,
-roundFinished,
-  currentCountry,
-  placeholder,
-  handleEnter,
-  restartGame,
-  countries,
-  correctCountries,
-  revealedCountries,
-  wrongCountry,
-  selectCountry
-} = useGame()
+const numberOfCountries = ref(20)
+
+const selectedContinent = ref<
+  string | null
+>(null)
+
+const continents = [
+  'Europe',
+  'Asie',
+  'Afrique',
+  'Amérique du Nord',
+  'Amérique du Sud',
+  'Océanie'
+]
+
+function startGame() {
+  navigateTo({
+    path: '/game',
+    query: {
+      countries:
+        numberOfCountries.value,
+      continent:
+        selectedContinent.value ||
+        ''
+    }
+  })
+}
 </script>
 
 <template>
-  <main class="h-screen bg-zinc-900 text-white">
-    <div class="flex h-full">
+  <main
+    class="flex min-h-screen items-center justify-center bg-zinc-900 px-6 text-white"
+  >
+    <div
+      class="w-full max-w-xl rounded-3xl border border-zinc-800 bg-zinc-950 p-10 shadow-2xl"
+    >
+      <h1
+        class="text-center text-5xl font-black"
+      >
+        GeoQuiz
+      </h1>
 
-      <div class="flex-1 p-4">
-        <WorldMap
-          :current-country-code="
-            currentCountry.code
+      <p
+        class="mt-4 text-center text-zinc-400"
+      >
+        Configurez votre partie
+      </p>
+
+      <div class="mt-12">
+
+        <label
+          class="text-lg font-semibold"
+        >
+          Nombre de pays
+        </label>
+
+        <input
+          v-model="
+            numberOfCountries
           "
-          :correct-countries="
-            correctCountries
-          "
-          :revealed-countries="
-            revealedCountries
-          "
-          :wrong-country="
-            wrongCountry
-          "
-          @select-country="
-            selectCountry
-          "
-        />
+          type="range"
+          min="5"
+          max="100"
+          class="mt-4 w-full"
+        >
+
+        <div
+          class="mt-2 text-center text-zinc-400"
+        >
+          {{
+            numberOfCountries
+          }}
+          pays
+        </div>
+
       </div>
 
-      <div
-        class="flex w-[420px] flex-col border-l border-zinc-800 p-8"
-      >
+      <div class="mt-6">
 
-        <h1 class="text-4xl font-bold">
-          GeoQuiz
-        </h1>
-
-        <p class="mt-4 text-zinc-400">
-          Score : {{ score }}
-        </p>
-
-        <p class="mt-2 text-zinc-500">
-          Pays joués :
-          {{ usedCountries.length }}
-          /
-          {{ countries.length }}
-        </p>
-
-        <button
-          class="mt-6 rounded-xl bg-zinc-700 px-6 py-3 hover:bg-zinc-600"
-          @click="restartGame"
+        <label
+          class="text-lg font-semibold"
         >
-          Recommencer
-        </button>
+          Continent
+        </label>
 
-        <template v-if="!gameFinished">
-
-          <FlagCard
-            :country="currentCountry"
-          />
-
-          <GameInput
-            v-model="answer"
-            :placeholder="
-              placeholder
-            "
-            :input-ref="inputRef"
-            @enter="handleEnter"
-          />
-
-          <p
-            class="mt-8 whitespace-pre-line text-center text-xl"
-          >
-            {{ result }}
-          </p>
-
-          <p
-            v-if="!tasks.map"
-            class="mt-6 text-center text-zinc-400"
-          >
-            Cliquez sur le pays
-          </p>
-
-          <p
-            v-if="roundFinished"
-            class="mt-6 text-center text-zinc-400"
-          >
-            Appuyez sur Entrée pour continuer
-          </p>
-
-        </template>
-
-        <template v-else>
-
-          <h2
-            class="mt-12 text-4xl font-bold"
-          >
-            Partie terminée 🎉
-          </h2>
-
-          <p class="mt-6 text-2xl">
-            Score final :
-            {{ score }}
-            /
-            {{ countries.length * 3 }}
-          </p>
+        <div
+          class="mt-4 grid grid-cols-2 gap-3"
+        >
 
           <button
-            class="mt-8 rounded-xl bg-blue-600 px-6 py-3 font-semibold hover:bg-blue-500"
-            @click="restartGame"
+            class="rounded-xl border border-zinc-700 px-4 py-3 transition hover:bg-zinc-800"
+            :class="{
+              'bg-blue-600 border-blue-500':
+                selectedContinent ===
+                null
+            }"
+            @click="
+              selectedContinent =
+                null
+            "
           >
-            Rejouer
+            Monde entier
           </button>
 
-        </template>
+          <button
+            v-for="
+              continent in continents
+            "
+            :key="continent"
+            class="rounded-xl border border-zinc-700 px-4 py-3 transition hover:bg-zinc-800"
+            :class="{
+              'bg-blue-600 border-blue-500':
+                selectedContinent ===
+                continent
+            }"
+            @click="
+              selectedContinent =
+                continent
+            "
+          >
+            {{ continent }}
+          </button>
+
+        </div>
 
       </div>
+
+      <button
+        class="mt-12 w-full rounded-2xl bg-blue-600 py-4 text-xl font-bold transition hover:bg-blue-500"
+        @click="startGame"
+      >
+        Jouer
+      </button>
 
     </div>
   </main>

@@ -1,52 +1,94 @@
 import {
   computed,
-  nextTick,
+  onMounted,
   reactive,
   ref
 } from 'vue'
 
-import { countries } from '../data/countries'
+import { countries as allCountries } from '../data/countries'
 
 import type { Country } from '../types/country'
+import type { GameSettings } from '../types/game'
 
-export function useGame() {
+type TaskState =
+  | 'pending'
+  | 'success'
+  | 'error'
+
+export function useGame(
+  settings: GameSettings
+) {
+  function shuffle<T>(array: T[]) {
+    return [...array].sort(
+      () => Math.random() - 0.5
+    )
+  }
+
+  const filteredCountries =
+    allCountries.filter(country => {
+      if (
+        settings.continent &&
+        country.continent !==
+          settings.continent
+      ) {
+        return false
+      }
+
+      return true
+    })
+
+  const countries = shuffle(
+    filteredCountries
+  ).slice(
+    0,
+    settings.numberOfCountries
+  )
+
   const score = ref(0)
 
   const answer = ref('')
 
-  const result = ref('')
-
   const usedCountries = ref<string[]>([])
 
-  const correctCountries = ref<string[]>([])
-
-  const revealedCountries = ref<string[]>([])
-
-  const wrongCountry = ref<string | null>(
-    null
+  const correctCountries = ref<string[]>(
+    []
   )
+
+  const revealedCountries = ref<
+    string[]
+  >([])
+
+  const wrongCountry = ref<
+    string | null
+  >(null)
 
   const gameFinished = ref(false)
 
-  const inputRef =
-    ref<HTMLInputElement | null>(null)
-
-  const tasks = reactive({
-    country: false,
-    capital: false,
-    map: false
+  const tasks = reactive<{
+    country: TaskState
+    capital: TaskState
+    map: TaskState
+  }>({
+    country: 'pending',
+    capital: 'pending',
+    map: 'pending'
   })
 
   function resetTasks() {
-    tasks.country = false
-    tasks.capital = false
-    tasks.map = false
+    tasks.country = 'pending'
+    tasks.capital = 'pending'
+    tasks.map = 'pending'
   }
 
-  function normalizeString(value: string) {
+  function normalizeString(
+    value: string
+  ) {
     return value
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
+      .replace(
+        /[\u0300-\u036f]/g,
+        ''
+      )
       .trim()
       .toLowerCase()
   }
@@ -72,38 +114,50 @@ export function useGame() {
     ]!
   }
 
-  const currentCountry = ref<Country>(
-    pickRandomCountry()
-  )
+  const currentCountry =
+    ref<Country | null>(null)
 
-  const roundFinished = computed(() => {
-    return (
-      tasks.country &&
-      tasks.capital &&
-      tasks.map
-    )
+  onMounted(() => {
+    currentCountry.value =
+      pickRandomCountry()
   })
 
+  const roundFinished = computed(
+    () => {
+      return (
+        tasks.country !==
+          'pending' &&
+        tasks.capital !==
+          'pending' &&
+        tasks.map !== 'pending'
+      )
+    }
+  )
+
   const placeholder = computed(() => {
-    if (!tasks.country) {
+    if (
+      tasks.country ===
+      'pending'
+    ) {
       return 'Nom du pays'
     }
 
-    if (!tasks.capital) {
+    if (
+      tasks.capital ===
+      'pending'
+    ) {
       return 'Capitale'
     }
 
     return 'Appuyez sur Entrée'
   })
 
-  function focusInput() {
-    nextTick(() => {
-      inputRef.value?.focus()
-    })
-  }
-
   function validateCountry() {
-    if (tasks.country) {
+    if (
+      !currentCountry.value ||
+      tasks.country !==
+        'pending'
+    ) {
       return
     }
 
@@ -115,20 +169,17 @@ export function useGame() {
         currentCountry.value.name
       )
 
-    if (
+    const success =
       normalizedAnswer ===
       normalizedCountry
-    ) {
-      result.value +=
-        '\n✅ Bon pays !'
 
+    tasks.country = success
+      ? 'success'
+      : 'error'
+
+    if (success) {
       score.value++
-    } else {
-      result.value +=
-        `\n❌ Mauvais pays — c'était ${currentCountry.value.name}`
     }
-
-    tasks.country = true
 
     answer.value = ''
 
@@ -136,7 +187,11 @@ export function useGame() {
   }
 
   function validateCapital() {
-    if (tasks.capital) {
+    if (
+      !currentCountry.value ||
+      tasks.capital !==
+        'pending'
+    ) {
       return
     }
 
@@ -148,54 +203,55 @@ export function useGame() {
         currentCountry.value.capital
       )
 
-    if (
+    const success =
       normalizedAnswer ===
       normalizedCapital
-    ) {
-      result.value +=
-        '\n✅ Bonne capitale !'
 
+    tasks.capital = success
+      ? 'success'
+      : 'error'
+
+    if (success) {
       score.value++
-    } else {
-      result.value +=
-        `\n❌ Mauvaise capitale — c'était ${currentCountry.value.capital}`
     }
-
-    tasks.capital = true
 
     answer.value = ''
 
     checkRoundCompletion()
   }
 
-  function selectCountry(code: string) {
+  function selectCountry(
+    code: string
+  ) {
     if (
+      !currentCountry.value ||
       gameFinished.value ||
-      tasks.map
+      tasks.map !== 'pending'
     ) {
       return
     }
 
     if (
-      code === currentCountry.value.code
+      code ===
+      currentCountry.value.code
     ) {
-      result.value +=
-        '\n✅ Bon emplacement !'
-
       score.value++
+
+      tasks.map = 'success'
 
       if (
         !correctCountries.value.includes(
           code
         )
       ) {
-        correctCountries.value.push(code)
+        correctCountries.value.push(
+          code
+        )
       }
 
       wrongCountry.value = null
     } else {
-      result.value +=
-        '\n❌ Mauvais emplacement'
+      tasks.map = 'error'
 
       wrongCountry.value = code
 
@@ -210,13 +266,14 @@ export function useGame() {
       }
     }
 
-    tasks.map = true
-
     checkRoundCompletion()
   }
 
   function checkRoundCompletion() {
-    if (!roundFinished.value) {
+    if (
+      !currentCountry.value ||
+      !roundFinished.value
+    ) {
       return
     }
 
@@ -237,7 +294,9 @@ export function useGame() {
 
     wrongCountry.value = null
 
-    if (remainingCountries.length === 0) {
+    if (
+      remainingCountries.length === 0
+    ) {
       gameFinished.value = true
 
       return
@@ -251,13 +310,9 @@ export function useGame() {
         )
       ]!
 
-    result.value = ''
-
     answer.value = ''
 
     resetTasks()
-
-    focusInput()
   }
 
   function restartGame() {
@@ -273,16 +328,12 @@ export function useGame() {
 
     gameFinished.value = false
 
-    result.value = ''
-
     answer.value = ''
 
     resetTasks()
 
     currentCountry.value =
       pickRandomCountry()
-
-    focusInput()
   }
 
   function handleEnter() {
@@ -296,13 +347,19 @@ export function useGame() {
       return
     }
 
-    if (!tasks.country) {
+    if (
+      tasks.country ===
+      'pending'
+    ) {
       validateCountry()
 
       return
     }
 
-    if (!tasks.capital) {
+    if (
+      tasks.capital ===
+      'pending'
+    ) {
       validateCapital()
 
       return
@@ -312,13 +369,11 @@ export function useGame() {
   return {
     score,
     answer,
-    result,
     usedCountries,
     correctCountries,
     revealedCountries,
     wrongCountry,
     gameFinished,
-    inputRef,
     currentCountry,
     placeholder,
     roundFinished,
@@ -326,8 +381,6 @@ export function useGame() {
     handleEnter,
     restartGame,
     selectCountry,
-    countries,
-    validateCountry,
-    validateCapital
+    countries
   }
 }
