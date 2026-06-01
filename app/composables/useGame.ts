@@ -8,7 +8,10 @@ import {
 import { countries as allCountries } from '../data/countries'
 
 import type { Country } from '../types/country'
-import type { GameSettings } from '../types/game'
+import type {
+  GameElement,
+  GameSettings
+} from '../types/game'
 
 type TaskState =
   | 'pending'
@@ -18,11 +21,15 @@ type TaskState =
 export function useGame(
   settings: GameSettings
 ) {
-  const startElement = settings.startElement
+  const startElement =
+    settings.startElement
 
-  const targetElements = settings.targetElements
+  const targetElements =
+    settings.targetElements
 
-  function shuffle<T>(array: T[]) {
+  function shuffle<T>(
+    array: T[]
+  ) {
     return [...array].sort(
       () => Math.random() - 0.5
     )
@@ -52,11 +59,13 @@ export function useGame(
 
   const answer = ref('')
 
-  const usedCountries = ref<string[]>([])
+  const usedCountries = ref<
+    string[]
+  >([])
 
-  const correctCountries = ref<string[]>(
-    []
-  )
+  const correctCountries = ref<
+    string[]
+  >([])
 
   const revealedCountries = ref<
     string[]
@@ -66,22 +75,35 @@ export function useGame(
     string | null
   >(null)
 
-  const gameFinished = ref(false)
+  const gameFinished =
+    ref(false)
 
-  const tasks = reactive<{
-    country: TaskState
-    capital: TaskState
-    map: TaskState
-  }>({
+  const tasks = reactive<
+    Record<
+      GameElement,
+      TaskState
+    >
+  >({
+    flag: 'pending',
     country: 'pending',
     capital: 'pending',
     map: 'pending'
   })
 
   function resetTasks() {
-    tasks.country = 'pending'
-    tasks.capital = 'pending'
-    tasks.map = 'pending'
+    Object.keys(tasks).forEach(
+      key => {
+        const task =
+          key as GameElement
+
+        tasks[task] =
+          targetElements.includes(
+            task
+          )
+            ? 'pending'
+            : 'success'
+      }
+    )
   }
 
   function normalizeString(
@@ -126,35 +148,33 @@ export function useGame(
       pickRandomCountry()
   })
 
-  const roundFinished = computed(
-    () => {
-      return (
-        tasks.country !==
-          'pending' &&
-        tasks.capital !==
-          'pending' &&
-        tasks.map !== 'pending'
+  const roundFinished =
+    computed(() => {
+      return targetElements.every(
+        task =>
+          tasks[task] !==
+          'pending'
       )
-    }
-  )
+    })
 
-  const placeholder = computed(() => {
-    if (
-      tasks.country ===
-      'pending'
-    ) {
-      return 'Nom du pays'
-    }
+  const placeholder =
+    computed(() => {
+      if (
+        tasks.country ===
+        'pending'
+      ) {
+        return 'Nom du pays'
+      }
 
-    if (
-      tasks.capital ===
-      'pending'
-    ) {
-      return 'Capitale'
-    }
+      if (
+        tasks.capital ===
+        'pending'
+      ) {
+        return 'Capitale'
+      }
 
-    return 'Appuyez sur Entrée'
-  })
+      return ''
+    })
 
   function validateCountry() {
     if (
@@ -165,17 +185,13 @@ export function useGame(
       return
     }
 
-    const normalizedAnswer =
-      normalizeString(answer.value)
-
-    const normalizedCountry =
+    const success =
+      normalizeString(
+        answer.value
+      ) ===
       normalizeString(
         currentCountry.value.name
       )
-
-    const success =
-      normalizedAnswer ===
-      normalizedCountry
 
     tasks.country = success
       ? 'success'
@@ -199,17 +215,13 @@ export function useGame(
       return
     }
 
-    const normalizedAnswer =
-      normalizeString(answer.value)
-
-    const normalizedCapital =
+    const success =
+      normalizeString(
+        answer.value
+      ) ===
       normalizeString(
         currentCountry.value.capital
       )
-
-    const success =
-      normalizedAnswer ===
-      normalizedCapital
 
     tasks.capital = success
       ? 'success'
@@ -299,10 +311,10 @@ export function useGame(
     wrongCountry.value = null
 
     if (
-      remainingCountries.length === 0
+      remainingCountries.length ===
+      0
     ) {
       gameFinished.value = true
-
       return
     }
 
@@ -347,7 +359,6 @@ export function useGame(
 
     if (roundFinished.value) {
       nextQuestion()
-
       return
     }
 
@@ -356,7 +367,6 @@ export function useGame(
       'pending'
     ) {
       validateCountry()
-
       return
     }
 
@@ -365,10 +375,11 @@ export function useGame(
       'pending'
     ) {
       validateCapital()
-
       return
     }
   }
+
+  resetTasks()
 
   return {
     score,
