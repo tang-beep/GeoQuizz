@@ -172,7 +172,7 @@ export const countries: Country[] = [
   {
     code: 'BI',
     name: 'Burundi',
-    capital: 'Bujumbura',
+    capital: 'Gitega',
     continent: 'Afrique',
     flag: 'https://flagcdn.com/bi.svg'
   },
@@ -242,8 +242,8 @@ export const countries: Country[] = [
   {
     code: 'CZ',
     name: 'Tchéquie',
-    capital: '',
-    continent: '',
+    capital: 'Prague',
+    continent: 'Europe',
     flag: 'https://flagcdn.com/cz.svg'
   },
   {
@@ -683,8 +683,8 @@ export const countries: Country[] = [
   {
     code: 'ME',
     name: 'Monténégro',
-    capital: '',
-    continent: '',
+    capital: 'Podgorica',
+    continent: 'Europe',
     flag: 'https://flagcdn.com/me.svg'
   },
   {
@@ -984,7 +984,7 @@ export const countries: Country[] = [
   {
     code: 'LK',
     name: 'Sri Lanka',
-    capital: 'Colombo',
+    capital: 'Sri Jayawardenapura Kotte',
     continent: 'Asie',
     flag: 'https://flagcdn.com/lk.svg'
   },
