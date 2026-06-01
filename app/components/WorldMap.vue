@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { GameElement } from '../types/game'
+
 import {
   nextTick,
   onMounted,
@@ -10,7 +12,10 @@ const props = defineProps<{
   currentCountryCode: string
   correctCountries: string[]
   revealedCountries: string[]
+  usedCountries: string[]
   wrongCountry: string | null
+  startElement?: GameElement
+  highlightCountry?: string
 }>()
 
 const emit = defineEmits<{
@@ -54,10 +59,22 @@ function applyCountryStyles() {
       path.classList.remove(
         'correct',
         'wrong',
-        'revealed'
+        'revealed',
+        'highlighted'
       )
 
       const code = path.id
+
+      if (
+        props.startElement ===
+          'map' &&
+        props.highlightCountry ===
+          code
+      ) {
+        path.classList.add(
+          'highlighted'
+        )
+      }
 
       if (
         props.correctCountries.includes(
@@ -84,6 +101,16 @@ function applyCountryStyles() {
       ) {
         path.classList.add(
           'wrong'
+        )
+      }
+
+      if (
+        props.usedCountries.includes(
+          code
+        )
+      ) {
+        path.classList.add(
+          'revealed'
         )
       }
     })
@@ -253,7 +280,10 @@ watch(
   () => [
     props.correctCountries,
     props.revealedCountries,
-    props.wrongCountry
+    props.usedCountries,
+    props.wrongCountry,
+    props.highlightCountry,
+    props.startElement
   ],
   () => {
     applyCountryStyles()
@@ -359,5 +389,9 @@ watch(
 
 .world-map path.revealed {
   fill: #a1a1aa;
+}
+
+.world-map path.highlighted {
+  fill: #eab308;
 }
 </style>

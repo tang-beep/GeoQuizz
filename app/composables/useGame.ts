@@ -59,6 +59,10 @@ export function useGame(
 
   const answer = ref('')
 
+  const flagChoices = ref<
+    Country[]
+  >([])
+
   const usedCountries = ref<
     string[]
   >([])
@@ -140,12 +144,46 @@ export function useGame(
     ]!
   }
 
+  function generateFlagChoices() {
+    if (
+      !currentCountry.value
+    ) {
+      return
+    }
+
+    const wrongCountries =
+      countries
+        .filter(
+          country =>
+            country.code !==
+            currentCountry.value!
+              .code
+        )
+        .sort(
+          () =>
+            Math.random() - 0.5
+        )
+        .slice(0, 3)
+
+    flagChoices.value = shuffle([
+      currentCountry.value,
+      ...wrongCountries
+    ])
+  }
+
   const currentCountry =
     ref<Country | null>(null)
 
   onMounted(() => {
     currentCountry.value =
       pickRandomCountry()
+    if (
+      targetElements.includes(
+        'flag'
+      )
+    ) {
+      generateFlagChoices()
+    }
   })
 
   const roundFinished =
@@ -173,7 +211,7 @@ export function useGame(
         return 'Capitale'
       }
 
-      return ''
+      return 'Entrée → question suivante'
     })
 
   function validateCountry() {
@@ -232,6 +270,31 @@ export function useGame(
     }
 
     answer.value = ''
+
+    checkRoundCompletion()
+  }
+
+  function selectFlag(
+    code: string
+  ) {
+    if (
+      !currentCountry.value ||
+      tasks.flag !== 'pending'
+    ) {
+      return
+    }
+
+    const success =
+      code ===
+      currentCountry.value.code
+
+    tasks.flag = success
+      ? 'success'
+      : 'error'
+
+    if (success) {
+      score.value++
+    }
 
     checkRoundCompletion()
   }
@@ -329,6 +392,14 @@ export function useGame(
     answer.value = ''
 
     resetTasks()
+
+    if (
+      targetElements.includes(
+        'flag'
+      )
+    ) {
+      generateFlagChoices()
+    }
   }
 
   function restartGame() {
@@ -350,6 +421,14 @@ export function useGame(
 
     currentCountry.value =
       pickRandomCountry()
+
+    if (
+      targetElements.includes(
+        'flag'
+      )
+    ) {
+      generateFlagChoices()
+    }
   }
 
   function handleEnter() {
@@ -379,6 +458,12 @@ export function useGame(
     }
   }
 
+  const maxScore = computed(
+    () =>
+      countries.length *
+      targetElements.length
+  )
+
   resetTasks()
 
   return {
@@ -399,6 +484,10 @@ export function useGame(
     countries,
 
     startElement,
-    targetElements
+    targetElements, 
+
+    flagChoices,
+    selectFlag,
+    maxScore
   }
 }
