@@ -8,6 +8,9 @@ import {
   watch
 } from 'vue'
 
+import { useMapCamera } from '../composables/useMapCamera'
+import type { MapConfig } from '~/maps/mapConfig';
+
 const props = defineProps<{
   currentCountryCode: string
   correctCountries: string[]
@@ -16,33 +19,37 @@ const props = defineProps<{
   wrongCountry: string | null
   startElement?: GameElement
   highlightCountry?: string
+
+  mapConfig: MapConfig
 }>()
 
-const emit = defineEmits<{
-  selectCountry: [code: string]
-}>()
+const emit = defineEmits<{selectCountry: [code: string]}>()
 
 const svgContent = ref('')
 
-const mapRef =
-  ref<HTMLDivElement | null>(null)
+const mapRef = ref<HTMLDivElement | null>(null)
 
-const containerRef =
-  ref<HTMLDivElement | null>(
-    null
-  )
+const containerRef = ref<HTMLDivElement | null>(null)
 
-const scale = ref(1)
+const camera = useMapCamera(props.mapConfig)
 
-const translateX = ref(0)
-const translateY = ref(0)
+const viewportWidth = ref(0)
+const viewportHeight = ref(0)
 
 const isDragging = ref(false)
-
-const startX = ref(0)
-const startY = ref(0)
-
 const hasDragged = ref(false)
+
+function updateViewport() {
+  if (!containerRef.value) {
+    return
+  }
+
+  viewportWidth.value =
+    containerRef.value.clientWidth
+
+  viewportHeight.value =
+    containerRef.value.clientHeight
+}
 
 function applyCountryStyles() {
   nextTick(() => {
@@ -146,112 +153,41 @@ function handleMapClick(
   emit('selectCountry', code)
 }
 
-function zoomIn() {
-  scale.value = Math.min(
-    scale.value + 0.5,
-    20
-  )
-}
-
-function zoomOut() {
-  scale.value = Math.max(
-    scale.value - 0.8,
-    1
-  )
-}
-
 function handleWheel(
   event: WheelEvent
 ) {
   event.preventDefault()
 
-  const container =
-    containerRef.value
-
-  if (!container) {
-    return
+  if (event.deltaY < 0) {
+    camera.zoomIn(1.2)
+  } else {
+    camera.zoomOut(1.2)
   }
-
-  const rect =
-    container.getBoundingClientRect()
-
-  const mouseX =
-    event.clientX - rect.left
-
-  const mouseY =
-    event.clientY - rect.top
-
-  const zoomIntensity = 0.1
-
-  const direction =
-    event.deltaY > 0 ? -1 : 1
-
-  const newScale = Math.min(
-    Math.max(
-      scale.value +
-        direction *
-          zoomIntensity,
-      1
-    ),
-    20
-  )
-
-  const scaleRatio =
-    newScale / scale.value
-
-  translateX.value =
-    mouseX -
-    (mouseX -
-      translateX.value) *
-      scaleRatio
-
-  translateY.value =
-    mouseY -
-    (mouseY -
-      translateY.value) *
-      scaleRatio
-
-  scale.value = newScale
 }
 
-function startDrag(
+function startDrag() {
+  isDragging.value = true
+  hasDragged.value = false
+}
+
+function onDrag(
   event: MouseEvent
 ) {
-  isDragging.value = true
-
-  hasDragged.value = false
-
-  startX.value =
-    event.clientX - translateX.value
-
-  startY.value =
-    event.clientY - translateY.value
-}
-
-function onDrag(event: MouseEvent) {
   if (!isDragging.value) {
     return
   }
 
-  const nextX =
-    event.clientX - startX.value
-
-  const nextY =
-    event.clientY - startY.value
-
   if (
-    Math.abs(
-      nextX - translateX.value
-    ) > 4 ||
-    Math.abs(
-      nextY - translateY.value
-    ) > 4
+    Math.abs(event.movementX) > 2 ||
+    Math.abs(event.movementY) > 2
   ) {
     hasDragged.value = true
   }
 
-  translateX.value = nextX
-  translateY.value = nextY
+  camera.moveBy(
+    event.movementX,
+    event.movementY
+  )
 }
 
 function stopDrag() {
@@ -260,11 +196,15 @@ function stopDrag() {
 
 onMounted(async () => {
   const response = await fetch(
-    '/map/world.svg'
+    props.mapConfig.svgPath
   )
 
   svgContent.value =
     await response.text()
+
+  await nextTick()
+
+  updateViewport()
 
   applyCountryStyles()
 
@@ -276,6 +216,11 @@ onMounted(async () => {
   window.addEventListener(
     'mouseup',
     stopDrag
+  )
+
+  window.addEventListener(
+    'resize',
+    updateViewport
   )
 })
 
@@ -302,21 +247,19 @@ watch(
     @wheel="handleWheel"
     @mousedown="startDrag"
   >
-
     <div
       class="absolute right-4 top-4 z-50 flex flex-col gap-2"
     >
-
       <button
         class="rounded-lg bg-zinc-800 px-4 py-2 text-white transition hover:bg-zinc-700"
-        @click="zoomIn"
+        @click="camera.zoomIn(1.8)"
       >
         +
       </button>
 
       <button
         class="rounded-lg bg-zinc-800 px-4 py-2 text-white transition hover:bg-zinc-700"
-        @click="zoomOut"
+        @click="camera.zoomOut(2)"
       >
         −
       </button>
@@ -324,24 +267,18 @@ watch(
     </div>
 
     <div
-      class="flex h-full w-full items-center justify-center"
-    >
-
-      <div
-        ref="mapRef"
-        class="world-map"
-        :style="{
-          transform: `
-            translate3d(${translateX}px, ${translateY}px, 0)
-            scale(${scale})
-          `
-        }"
-        v-html="svgContent"
-        @click="handleMapClick"
-      />
-
-    </div>
-
+      ref="mapRef"
+      class="world-map"
+      :style="{
+        transform:
+          camera.getTransform(
+            viewportWidth,
+            viewportHeight
+          )
+      }"
+      v-html="svgContent"
+      @click="handleMapClick"
+    />
   </div>
 </template>
 
@@ -350,20 +287,24 @@ watch(
   overflow: visible;
 
   transition:
-    transform 0.02s linear;
+    transform 0.05s linear;
 
-  transform-origin: center;
+  transform-origin:
+    top left;
 
-  backface-visibility: hidden;
+  backface-visibility:
+    hidden;
 }
 
 .world-map svg {
   width: 100%;
   height: auto;
 
-  shape-rendering: geometricPrecision;
+  shape-rendering:
+    geometricPrecision;
 
-  vector-effect: non-scaling-stroke;
+  vector-effect:
+    non-scaling-stroke;
 }
 
 .world-map path {

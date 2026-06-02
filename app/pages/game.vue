@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { worldMap } from '~/maps/world'
 import type {
   GameElement,
   GameSettings
@@ -139,6 +140,9 @@ function goBackToMenu() {
           "
           :wrong-country="
             wrongCountry
+          "
+          :map-config="
+            worldMap
           "
           @select-country="
             selectCountry

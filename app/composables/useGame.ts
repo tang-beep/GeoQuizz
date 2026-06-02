@@ -382,8 +382,6 @@ export function useGame(
     const remainingCountries =
       getRemainingCountries()
 
-    correctCountries.value = []
-
     revealedCountries.value = []
 
     wrongCountry.value = null
