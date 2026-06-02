@@ -107,6 +107,9 @@ function applyCountryStyles() {
       if (
         props.usedCountries.includes(
           code
+        ) &&
+        !props.correctCountries.includes(
+          code
         )
       ) {
         path.classList.add(
