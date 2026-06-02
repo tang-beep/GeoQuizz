@@ -38,9 +38,9 @@ const emit =
           ? 'bg-green-600'
           : error
             ? 'bg-red-600'
-            : 'bg-zinc-800'
+            : 'bg-zinc-800 hover:bg-zinc-700'
       ]"
-      class="rounded-xl transition hover:bg-zinc-700 disabled:cursor-default disabled:hover:bg-zinc-800"
+      class="rounded-xl transition disabled:cursor-default"
       @click="
         emit(
           'select',

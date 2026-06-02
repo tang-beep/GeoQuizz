@@ -159,19 +159,10 @@ function goBackToMenu() {
         <p
           class="mt-4 text-zinc-400"
         >
-          Score :
-          {{ score }}
-        </p>
+          {{usedCountries.length}} / {{ countries.length }}
 
-        <p
-          class="mt-2 text-zinc-500"
-        >
-          Pays joués :
-          {{
-            usedCountries.length
-          }}
-          /
-          {{ countries.length }}
+          | Score :
+          {{ score }}
         </p>
 
         <button
