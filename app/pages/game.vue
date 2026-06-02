@@ -86,6 +86,7 @@ const {
   targetElements,
 
   flagChoices,
+  revealedFlag,
   selectFlag,
   maxScore
 } = useGame(settings)
@@ -213,14 +214,21 @@ function goBackToMenu() {
 
           <FlagChoices
             v-if="
-              tasks.flag ===
-              'pending'
+              tasks.flag === 'pending'
             "
-            :countries="
-              flagChoices
+            :countries="flagChoices"
+            @select="selectFlag"
+          />
+
+          <FlagChoices
+            v-else-if="revealedFlag"
+            :countries="[revealedFlag]"
+            :disabled="true"
+            :success="
+              tasks.flag === 'success'
             "
-            @select="
-              selectFlag
+            :error="
+              tasks.flag === 'error'
             "
           />
 
@@ -284,54 +292,6 @@ function goBackToMenu() {
                   ? 'Capitale'
                   : currentCountry.capital
               }}
-            </div>
-
-            <div
-              v-if="
-                targetElements.includes(
-                  'map'
-                )
-              "
-              class="rounded-xl px-4 py-2 text-center text-sm font-semibold transition"
-              :class="{
-                'bg-zinc-700':
-                  tasks.map ===
-                  'pending',
-
-                'bg-green-600':
-                  tasks.map ===
-                  'success',
-
-                'bg-red-600':
-                  tasks.map ===
-                  'error'
-              }"
-            >
-              Carte
-            </div>
-
-            <div
-              v-if="
-                targetElements.includes(
-                  'flag'
-                )
-              "
-              class="rounded-xl px-4 py-2 text-center text-sm font-semibold transition"
-              :class="{
-                'bg-zinc-700':
-                  tasks.flag ===
-                  'pending',
-
-                'bg-green-600':
-                  tasks.flag ===
-                  'success',
-
-                'bg-red-600':
-                  tasks.flag ===
-                  'error'
-              }"
-            >
-              Drapeau
             </div>
 
           </div>

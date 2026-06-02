@@ -27,6 +27,9 @@ export function useGame(
   const targetElements =
     settings.targetElements
 
+  const revealedFlag =
+    ref<Country | null>(null)
+
   function shuffle<T>(
     array: T[]
   ) {
@@ -292,6 +295,9 @@ export function useGame(
       ? 'success'
       : 'error'
 
+    revealedFlag.value =
+      currentCountry.value
+
     if (success) {
       score.value++
     }
@@ -377,6 +383,8 @@ export function useGame(
 
     wrongCountry.value = null
 
+    revealedFlag.value = null
+
     if (
       remainingCountries.length ===
       0
@@ -416,6 +424,8 @@ export function useGame(
     revealedCountries.value = []
 
     wrongCountry.value = null
+
+    revealedFlag.value = null
 
     gameFinished.value = false
 
@@ -492,6 +502,7 @@ export function useGame(
 
     flagChoices,
     selectFlag,
+    revealedFlag, 
     maxScore
   }
 }
