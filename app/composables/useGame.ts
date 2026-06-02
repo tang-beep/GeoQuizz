@@ -8,7 +8,10 @@ import {
 import { countries as allCountries } from '../data/countries'
 
 import type { Country } from '../types/country'
-import type { GameSettings } from '../types/game'
+import type {
+  GameElement,
+  GameSettings
+} from '../types/game'
 
 type TaskState =
   | 'pending'
@@ -18,7 +21,18 @@ type TaskState =
 export function useGame(
   settings: GameSettings
 ) {
-  function shuffle<T>(array: T[]) {
+  const startElement =
+    settings.startElement
+
+  const targetElements =
+    settings.targetElements
+
+  const revealedFlag =
+    ref<Country | null>(null)
+
+  function shuffle<T>(
+    array: T[]
+  ) {
     return [...array].sort(
       () => Math.random() - 0.5
     )
@@ -48,11 +62,17 @@ export function useGame(
 
   const answer = ref('')
 
-  const usedCountries = ref<string[]>([])
+  const flagChoices = ref<
+    Country[]
+  >([])
 
-  const correctCountries = ref<string[]>(
-    []
-  )
+  const usedCountries = ref<
+    string[]
+  >([])
+
+  const correctCountries = ref<
+    string[]
+  >([])
 
   const revealedCountries = ref<
     string[]
@@ -62,22 +82,35 @@ export function useGame(
     string | null
   >(null)
 
-  const gameFinished = ref(false)
+  const gameFinished =
+    ref(false)
 
-  const tasks = reactive<{
-    country: TaskState
-    capital: TaskState
-    map: TaskState
-  }>({
+  const tasks = reactive<
+    Record<
+      GameElement,
+      TaskState
+    >
+  >({
+    flag: 'pending',
     country: 'pending',
     capital: 'pending',
     map: 'pending'
   })
 
   function resetTasks() {
-    tasks.country = 'pending'
-    tasks.capital = 'pending'
-    tasks.map = 'pending'
+    Object.keys(tasks).forEach(
+      key => {
+        const task =
+          key as GameElement
+
+        tasks[task] =
+          targetElements.includes(
+            task
+          )
+            ? 'pending'
+            : 'success'
+      }
+    )
   }
 
   function normalizeString(
@@ -114,43 +147,75 @@ export function useGame(
     ]!
   }
 
+  function generateFlagChoices() {
+    if (
+      !currentCountry.value
+    ) {
+      return
+    }
+
+    const wrongCountries =
+      countries
+        .filter(
+          country =>
+            country.code !==
+            currentCountry.value!
+              .code
+        )
+        .sort(
+          () =>
+            Math.random() - 0.5
+        )
+        .slice(0, 3)
+
+    flagChoices.value = shuffle([
+      currentCountry.value,
+      ...wrongCountries
+    ])
+  }
+
   const currentCountry =
     ref<Country | null>(null)
 
   onMounted(() => {
     currentCountry.value =
       pickRandomCountry()
-  })
-
-  const roundFinished = computed(
-    () => {
-      return (
-        tasks.country !==
-          'pending' &&
-        tasks.capital !==
-          'pending' &&
-        tasks.map !== 'pending'
+    if (
+      targetElements.includes(
+        'flag'
       )
-    }
-  )
-
-  const placeholder = computed(() => {
-    if (
-      tasks.country ===
-      'pending'
     ) {
-      return 'Nom du pays'
+      generateFlagChoices()
     }
-
-    if (
-      tasks.capital ===
-      'pending'
-    ) {
-      return 'Capitale'
-    }
-
-    return 'Appuyez sur Entrée'
   })
+
+  const roundFinished =
+    computed(() => {
+      return targetElements.every(
+        task =>
+          tasks[task] !==
+          'pending'
+      )
+    })
+
+  const placeholder =
+    computed(() => {
+      if (
+        tasks.country ===
+        'pending'
+      ) {
+        return 'Nom du pays'
+      }
+
+      if (
+        tasks.capital ===
+        'pending'
+      ) {
+        return 'Capitale'
+      }
+
+      return 'Entrée → question suivante'
+    })
 
   function validateCountry() {
     if (
@@ -161,17 +226,13 @@ export function useGame(
       return
     }
 
-    const normalizedAnswer =
-      normalizeString(answer.value)
-
-    const normalizedCountry =
+    const success =
+      normalizeString(
+        answer.value
+      ) ===
       normalizeString(
         currentCountry.value.name
       )
-
-    const success =
-      normalizedAnswer ===
-      normalizedCountry
 
     tasks.country = success
       ? 'success'
@@ -195,17 +256,13 @@ export function useGame(
       return
     }
 
-    const normalizedAnswer =
-      normalizeString(answer.value)
-
-    const normalizedCapital =
+    const success =
+      normalizeString(
+        answer.value
+      ) ===
       normalizeString(
         currentCountry.value.capital
       )
-
-    const success =
-      normalizedAnswer ===
-      normalizedCapital
 
     tasks.capital = success
       ? 'success'
@@ -216,6 +273,34 @@ export function useGame(
     }
 
     answer.value = ''
+
+    checkRoundCompletion()
+  }
+
+  function selectFlag(
+    code: string
+  ) {
+    if (
+      !currentCountry.value ||
+      tasks.flag !== 'pending'
+    ) {
+      return
+    }
+
+    const success =
+      code ===
+      currentCountry.value.code
+
+    tasks.flag = success
+      ? 'success'
+      : 'error'
+
+    revealedFlag.value =
+      currentCountry.value
+
+    if (success) {
+      score.value++
+    }
 
     checkRoundCompletion()
   }
@@ -292,13 +377,19 @@ export function useGame(
     const remainingCountries =
       getRemainingCountries()
 
+    correctCountries.value = []
+
+    revealedCountries.value = []
+
     wrongCountry.value = null
 
+    revealedFlag.value = null
+
     if (
-      remainingCountries.length === 0
+      remainingCountries.length ===
+      0
     ) {
       gameFinished.value = true
-
       return
     }
 
@@ -313,6 +404,14 @@ export function useGame(
     answer.value = ''
 
     resetTasks()
+
+    if (
+      targetElements.includes(
+        'flag'
+      )
+    ) {
+      generateFlagChoices()
+    }
   }
 
   function restartGame() {
@@ -326,6 +425,8 @@ export function useGame(
 
     wrongCountry.value = null
 
+    revealedFlag.value = null
+
     gameFinished.value = false
 
     answer.value = ''
@@ -334,6 +435,14 @@ export function useGame(
 
     currentCountry.value =
       pickRandomCountry()
+
+    if (
+      targetElements.includes(
+        'flag'
+      )
+    ) {
+      generateFlagChoices()
+    }
   }
 
   function handleEnter() {
@@ -343,7 +452,6 @@ export function useGame(
 
     if (roundFinished.value) {
       nextQuestion()
-
       return
     }
 
@@ -352,7 +460,6 @@ export function useGame(
       'pending'
     ) {
       validateCountry()
-
       return
     }
 
@@ -361,10 +468,17 @@ export function useGame(
       'pending'
     ) {
       validateCapital()
-
       return
     }
   }
+
+  const maxScore = computed(
+    () =>
+      countries.length *
+      targetElements.length
+  )
+
+  resetTasks()
 
   return {
     score,
@@ -381,6 +495,14 @@ export function useGame(
     handleEnter,
     restartGame,
     selectCountry,
-    countries
+    countries,
+
+    startElement,
+    targetElements, 
+
+    flagChoices,
+    selectFlag,
+    revealedFlag, 
+    maxScore
   }
 }

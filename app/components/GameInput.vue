@@ -5,8 +5,7 @@ defineProps<{
 }>()
 
 const emit = defineEmits([
-  'update:modelValue',
-  'enter'
+  'update:modelValue'
 ])
 </script>
 
@@ -23,6 +22,5 @@ const emit = defineEmits([
           .value
       )
     "
-    @keyup.enter="emit('enter')"
   >
 </template>

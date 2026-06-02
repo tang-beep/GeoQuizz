@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import type { GameSettings } from '../types/game'
+import type {
+  GameElement,
+  GameSettings
+} from '../types/game'
 
 const route = useRoute()
 
@@ -11,8 +14,56 @@ const settings: GameSettings = {
   continent:
     route.query.continent
       ?.toString()
-      .trim() || null
+      .trim() || null,
+
+  startElement:
+    (
+      route.query.start ||
+      'flag'
+    ) as GameElement,
+
+  targetElements:
+    route.query.targets
+      ?.toString()
+      .split(',')
+      .filter(Boolean) as GameElement[]
 }
+
+function onKeyDown(
+  event: KeyboardEvent
+) {
+  if (
+    event.key !== 'Enter'
+  ) {
+    return
+  }
+
+  const target =
+    event.target as HTMLElement
+
+  if (
+    target.tagName ===
+      'BUTTON'
+  ) {
+    return
+  }
+
+  handleEnter()
+}
+
+onMounted(() => {
+  window.addEventListener(
+    'keydown',
+    onKeyDown
+  )
+})
+
+onUnmounted(() => {
+  window.removeEventListener(
+    'keydown',
+    onKeyDown
+  )
+})
 
 const {
   score,
@@ -28,7 +79,16 @@ const {
   revealedCountries,
   wrongCountry,
   selectCountry,
-  tasks
+  tasks,
+  roundFinished,
+
+  startElement,
+  targetElements,
+
+  flagChoices,
+  revealedFlag,
+  selectFlag,
+  maxScore
 } = useGame(settings)
 
 function goBackToMenu() {
@@ -45,15 +105,29 @@ function goBackToMenu() {
 </script>
 
 <template>
-  <main
-    class="h-dvh overflow-hidden bg-zinc-900 text-white"
-  >
+  <main class="h-dvh overflow-hidden bg-zinc-900 text-white">
     <div class="flex h-full">
 
-      <div class="relative flex-1">
-
+      <div
+        v-if="
+          targetElements.includes(
+            'map'
+          ) ||
+          startElement === 'map'
+        "
+        class="relative flex-1"
+      >
         <WorldMap
           v-if="currentCountry"
+          :start-element="
+            startElement
+          "
+          :used-countries="
+            usedCountries
+          "
+          :highlight-country="
+            currentCountry.code
+          "
           :current-country-code="
             currentCountry.code
           "
@@ -70,7 +144,6 @@ function goBackToMenu() {
             selectCountry
           "
         />
-
       </div>
 
       <div
@@ -115,18 +188,48 @@ function goBackToMenu() {
           "
         >
 
-          <FlagCard
+          <StartElement
+            v-if="
+              startElement !==
+              'map'
+            "
             :country="
               currentCountry
+            "
+            :start-element="
+              startElement
             "
           />
 
           <GameInput
-            v-model="answer"
-            :placeholder="
-              placeholder
+            v-if="
+              tasks.country ===
+                'pending' ||
+              tasks.capital ===
+                'pending'
             "
-            @enter="handleEnter"
+            v-model="answer"
+            :placeholder="placeholder"
+          />
+
+          <FlagChoices
+            v-if="
+              tasks.flag === 'pending'
+            "
+            :countries="flagChoices"
+            @select="selectFlag"
+          />
+
+          <FlagChoices
+            v-else-if="revealedFlag"
+            :countries="[revealedFlag]"
+            :disabled="true"
+            :success="
+              tasks.flag === 'success'
+            "
+            :error="
+              tasks.flag === 'error'
+            "
           />
 
           <div
@@ -134,6 +237,11 @@ function goBackToMenu() {
           >
 
             <div
+              v-if="
+                targetElements.includes(
+                  'country'
+                )
+              "
               class="rounded-xl px-4 py-2 text-center text-sm font-semibold transition"
               :class="{
                 'bg-zinc-700':
@@ -158,6 +266,11 @@ function goBackToMenu() {
             </div>
 
             <div
+              v-if="
+                targetElements.includes(
+                  'capital'
+                )
+              "
               class="rounded-xl px-4 py-2 text-center text-sm font-semibold transition"
               :class="{
                 'bg-zinc-700':
@@ -181,30 +294,15 @@ function goBackToMenu() {
               }}
             </div>
 
-            <div
-              class="rounded-xl px-4 py-2 text-center text-sm font-semibold transition"
-              :class="{
-                'bg-zinc-700':
-                  tasks.map ===
-                  'pending',
-
-                'bg-green-600':
-                  tasks.map ===
-                  'success',
-
-                'bg-red-600':
-                  tasks.map ===
-                  'error'
-              }"
-            >
-              Carte
-            </div>
-
           </div>
 
         </template>
 
-        <template v-else-if="gameFinished">
+        <template
+          v-else-if="
+            gameFinished
+          "
+        >
 
           <h2
             class="mt-12 text-4xl font-bold"
@@ -216,9 +314,7 @@ function goBackToMenu() {
             Score final :
             {{ score }}
             /
-            {{
-              countries.length * 3
-            }}
+            {{ maxScore }}
           </p>
 
           <button

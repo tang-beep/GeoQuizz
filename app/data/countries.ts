@@ -249,8 +249,8 @@ export const countries: Country[] = [
   {
     code: 'CI',
     name: 'Côte d’Ivoire',
-    capital: '',
-    continent: '',
+    capital: 'Yamoussoukro',
+    continent: 'Afrique',
     flag: 'https://flagcdn.com/ci.svg'
   },
   {
