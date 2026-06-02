@@ -19,6 +19,13 @@ const targetElements =
     'map'
   ])
 
+const previousTargets =
+  ref<GameElement[]>([
+    'country',
+    'capital',
+    'map'
+  ])
+
 const availableElements = [
   {
     value: 'flag',
@@ -50,7 +57,7 @@ const selectableTargets =
     )
   )
 
-  watch(
+watch(
   startElement,
   newValue => {
     targetElements.value =
@@ -63,52 +70,57 @@ const selectableTargets =
       targetElements.value.length ===
       0
     ) {
-      const firstAvailable =
+      const fallback =
         availableElements.find(
           element =>
-            element.value !== newValue
+            element.value !==
+            newValue
         )
 
-      if (firstAvailable) {
+      if (fallback) {
         targetElements.value = [
-          firstAvailable.value as GameElement
+          fallback.value as GameElement
         ]
       }
     }
+
+    previousTargets.value = [
+      ...targetElements.value
+    ]
   },
   {
     immediate: true
   }
 )
 
-function toggleTarget(
-  value: GameElement
-) {
-  const index =
-    targetElements.value.indexOf(
-      value
-    )
-
-  if (index >= 0) {
+watch(
+  targetElements,
+  newTargets => {
     if (
-      targetElements.value.length ===
-      1
+      newTargets.length === 0
     ) {
+      targetElements.value = [
+        ...previousTargets.value
+      ]
       return
     }
 
-    targetElements.value.splice(
-      index,
-      1
-    )
+    previousTargets.value = [
+      ...newTargets
+    ]
+  },
+  {
+    deep: true
+  }
+)
 
+function startGame() {
+  if (
+    targetElements.value.length === 0
+  ) {
     return
   }
 
-  targetElements.value.push(value)
-}
-
-function startGame() {
   navigateTo({
     path: '/game',
     query: {
@@ -139,7 +151,6 @@ function startGame() {
       </h1>
 
       <div class="mt-10">
-
         <label
           class="mb-2 block text-sm text-zinc-400"
         >
@@ -158,7 +169,6 @@ function startGame() {
       </div>
 
       <div class="mt-6">
-
         <label
           class="mb-2 block text-sm text-zinc-400"
         >
@@ -201,11 +211,9 @@ function startGame() {
             Océanie
           </option>
         </select>
-
       </div>
 
       <div class="mt-8">
-
         <h2
           class="mb-3 text-lg font-bold"
         >
@@ -229,11 +237,9 @@ function startGame() {
             {{ element.label }}
           </label>
         </div>
-
       </div>
 
       <div class="mt-8">
-
         <h2
           class="mb-3 text-lg font-bold"
         >
@@ -247,40 +253,33 @@ function startGame() {
             v-for="element in selectableTargets"
             :key="element.value"
             :class="[
-            'flex items-center gap-3 rounded-xl p-3',
-            element.disabled
-              ? 'cursor-not-allowed bg-zinc-900 text-zinc-600'
-              : 'cursor-pointer bg-zinc-800'
-          ]"
+              'flex items-center gap-3 rounded-xl p-3',
+              element.disabled
+                ? 'cursor-not-allowed bg-zinc-900 text-zinc-600'
+                : 'cursor-pointer bg-zinc-800'
+            ]"
           >
             <input
-              :checked="
-                targetElements.includes(
-                  element.value as GameElement
-                )
-              "
+              v-model="targetElements"
+              :value="element.value"
               :disabled="element.disabled"
               type="checkbox"
-              @change="
-                toggleTarget(
-                  element.value as GameElement
-                )
-              "
             >
 
             {{ element.label }}
           </label>
         </div>
-
       </div>
 
       <button
-        class="mt-10 w-full rounded-xl bg-blue-600 py-4 font-bold transition hover:bg-blue-500"
+        :disabled="
+          targetElements.length === 0
+        "
+        class="mt-10 w-full rounded-xl bg-blue-600 py-4 font-bold transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-zinc-700"
         @click="startGame"
       >
         Commencer
       </button>
-
     </div>
   </main>
 </template>
