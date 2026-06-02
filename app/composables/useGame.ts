@@ -51,12 +51,7 @@ export function useGame(
       return true
     })
 
-  const countries = shuffle(
-    filteredCountries
-  ).slice(
-    0,
-    settings.numberOfCountries
-  )
+  const countries = ref<Country[]>([])
 
   const score = ref(0)
 
@@ -97,6 +92,15 @@ export function useGame(
     map: 'pending'
   })
 
+  function generateCountries() {
+    countries.value = shuffle(
+      filteredCountries
+    ).slice(
+      0,
+      settings.numberOfCountries
+    )
+  }
+
   function resetTasks() {
     Object.keys(tasks).forEach(
       key => {
@@ -127,7 +131,7 @@ export function useGame(
   }
 
   function getRemainingCountries() {
-    return countries.filter(
+    return countries.value.filter(
       country =>
         !usedCountries.value.includes(
           country.code
@@ -155,7 +159,7 @@ export function useGame(
     }
 
     const wrongCountries =
-      countries
+      countries.value
         .filter(
           country =>
             country.code !==
@@ -178,6 +182,7 @@ export function useGame(
     ref<Country | null>(null)
 
   onMounted(() => {
+    generateCountries()
     currentCountry.value =
       pickRandomCountry()
     if (
@@ -415,6 +420,8 @@ export function useGame(
   }
 
   function restartGame() {
+    generateCountries()
+
     score.value = 0
 
     usedCountries.value = []
@@ -474,7 +481,7 @@ export function useGame(
 
   const maxScore = computed(
     () =>
-      countries.length *
+      countries.value.length *
       targetElements.length
   )
 
