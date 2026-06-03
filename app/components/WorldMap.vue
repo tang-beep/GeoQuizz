@@ -195,6 +195,58 @@ function handleWheel(
   }
 }
 
+function handleMouseOver(
+  event: MouseEvent
+) {
+  const target =
+    event.target as SVGPathElement
+
+  if (
+    !target ||
+    target.tagName !== 'path'
+  ) {
+    return
+  }
+
+  const code = target.id
+
+  mapRef.value
+    ?.querySelectorAll(
+      `path[id="${code}"]`
+    )
+    .forEach(path =>
+      path.classList.add(
+        'hovered'
+      )
+    )
+}
+
+function handleMouseOut(
+  event: MouseEvent
+) {
+  const target =
+    event.target as SVGPathElement
+
+  if (
+    !target ||
+    target.tagName !== 'path'
+  ) {
+    return
+  }
+
+  const code = target.id
+
+  mapRef.value
+    ?.querySelectorAll(
+      `path[id="${code}"]`
+    )
+    .forEach(path =>
+      path.classList.remove(
+        'hovered'
+      )
+    )
+}
+
 function startDrag() {
   isDragging.value = true
   hasDragged.value = false
@@ -326,14 +378,15 @@ watch(
       ref="mapRef"
       class="world-map"
       :style="{
-        transform:
-          camera.getTransform(
-            viewportWidth,
-            viewportHeight
-          )
+        transform: camera.getTransform(
+          viewportWidth,
+          viewportHeight
+        )
       }"
       v-html="svgContent"
       @click="handleMapClick"
+      @mouseover="handleMouseOver"
+      @mouseout="handleMouseOut"
     />
   </div>
 </template>
@@ -373,9 +426,11 @@ watch(
     opacity 0.15s;
 }
 
-.world-map path:hover {
+.world-map path.hovered {
   fill: #6c6c75;
+}
 
+.world-map path:hover {
   cursor: pointer;
 }
 
@@ -399,10 +454,5 @@ watch(
   fill: #424242;
   opacity: 0.35;
   pointer-events: none;
-}
-
-.world-map path.disabled:hover {
-  fill: #424242;
-  cursor: default;
 }
 </style>
