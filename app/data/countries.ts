@@ -3,1184 +3,1329 @@ import type { Country } from '../types/country'
 export const countries: Country[] = [
   {
     code: 'AF',
-    name: 'Afghanistan',
-    capital: 'Kabul',
+    names: ['Afghanistan'],
+    capitals: [
+      'Kaboul', 
+      'Kabul'
+    ],
     continent: 'asia',
     flag: 'https://flagcdn.com/af.svg'
   },
   {
+    code: 'ZA',
+    names: [
+      'Afrique du Sud', 
+      'South Africa'
+    ],
+    capitals: [
+      'Le Cap',
+      'Cape Town',
+      'Pretoria',
+      'Bloemfontein'
+    ],
+    continent: 'africa',
+    flag: 'https://flagcdn.com/za.svg'
+  },
+  {
     code: 'AL',
-    name: 'Albanie',
-    capital: 'Tirana',
+    names: [
+      'Albanie', 
+      'Albania'
+    ],
+    capitals: ['Tirana'],
     continent: 'europe',
     flag: 'https://flagcdn.com/al.svg'
   },
   {
     code: 'DZ',
-    name: 'Algérie',
-    capital: 'Alger',
+    names: [
+      'Algérie', 
+      'Algeria'
+    ],
+    capitals: ['Alger'],
     continent: 'africa',
     flag: 'https://flagcdn.com/dz.svg'
   },
   {
-    code: 'AI',
-    name: 'Anguilla',
-    capital: 'The Valley',
+    code: 'DE',
+    names: [
+      'Allemagne', 
+      'Deutschland',
+      'Germany'
+    ],
+    capitals: ['Berlin'],
+    continent: 'europe',
+    flag: 'https://flagcdn.com/de.svg'
+  },
+  {
+    code: 'AO',
+    names: [
+      'Angola'
+    ],
+    capitals: [
+      'Louanda',
+      'Luand'
+    ],
+    continent: 'africa',
+    flag: 'https://flagcdn.com/ao.svg'
+  },
+  {
+    code: 'AG',
+    names: [
+      'Antigua-et-Barbuda', 
+      'Antigua and Barbuda'
+    ],
+    capitals: [
+      "Saint John's",
+      "St. John's"
+    ],
     continent: 'northAmerica',
-    flag: 'https://flagcdn.com/ai.svg'
+    flag: 'https://flagcdn.com/ag.svg'
+  },
+  {
+    code: 'SA',
+    names: [
+      'Arabie saoudite', 
+      'Saudi Arabia'
+    ],
+    capitals: [
+      'Riyad',
+      'Riyadh'
+    ],
+    continent: 'asia',
+    flag: 'https://flagcdn.com/sa.svg'
+  },
+  {
+    code: 'AR',
+    names: [
+      'Argentine',
+      'Argentina'
+    ],
+    capitals: ['Buenos Aires'],
+    continent: 'asia',
+    flag: 'https://flagcdn.com/ar.svg'
   },
   {
     code: 'AM',
-    name: 'Arménie',
-    capital: 'Yerevan',
+    names: [
+      'Arménie',
+      'Armenia'
+    ],
+    capitals: [
+      'Yerevan', 
+      'Erevan'
+    ],
     continent: 'asia',
     flag: 'https://flagcdn.com/am.svg'
   },
   {
-    code: 'AW',
-    name: 'Aruba',
-    capital: 'Oranjestad',
-    continent: 'southAmerica',
-    flag: 'https://flagcdn.com/aw.svg'
+    code: 'AU',
+    names: [
+      'Australie',
+      'Australia'
+    ],
+    capitals: [
+      'Canberra'
+    ],
+    continent: 'asia',
+    flag: 'https://flagcdn.com/au.svg'
   },
   {
     code: 'AT',
-    name: 'Autriche',
-    capital: 'Vienne',
+    names: [
+      'Autriche',
+      'Österreich', 
+      'Austria'
+    ],
+    capitals: [
+      'Vienne',
+      'Vienna'
+    ],
     continent: 'europe',
     flag: 'https://flagcdn.com/at.svg'
   },
   {
+    code: 'AZ',
+    names: [
+      'Azerbaïdjan',
+      'Azerbaijan'
+    ],
+    capitals: [
+      'Bakou',
+      'Baku'
+    ],
+    continent: 'asia',
+    flag: 'https://flagcdn.com/az.svg'
+  },
+  {
+    code: 'BS',
+    names: [
+      'Bahamas'
+    ],
+    capitals: [
+      'Nassau'
+    ],
+    continent: 'northAmerica',
+    flag: 'https://flagcdn.com/bs.svg'
+  },
+  {
     code: 'BH',
-    name: 'Bahreïn',
-    capital: 'Manama',
+    names: [
+      'Bahreïn',
+      'Bahrain'
+    ],
+    capitals: ['Manama'],
     continent: 'asia',
     flag: 'https://flagcdn.com/bh.svg'
   },
   {
     code: 'BD',
-    name: 'Bangladesh',
-    capital: 'Dhaka',
+    names: ['Bangladesh'],
+    capitals: ['Dhaka'],
     continent: 'asia',
     flag: 'https://flagcdn.com/bd.svg'
   },
   {
     code: 'BB',
-    name: 'Barbade',
-    capital: 'Bridgetown',
+    names: [
+      'Barbade',
+      'Barbados'
+    ],
+    capitals: ['Bridgetown'],
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/bb.svg'
   },
   {
-    code: 'BY',
-    name: 'Biélorussie',
-    capital: 'Minsk',
-    continent: 'europe',
-    flag: 'https://flagcdn.com/by.svg'
-  },
-  {
     code: 'BE',
-    name: 'Belgique',
-    capital: 'Brussels',
+    names: [
+      'Belgique',
+      'Belgien',
+      'Belgium'
+    ],
+    capitals: [
+      'Bruxelles',
+      'Brussels'
+    ],
     continent: 'europe',
     flag: 'https://flagcdn.com/be.svg'
   },
   {
     code: 'BZ',
-    name: 'Belize',
-    capital: 'Belmopan',
+    names: [
+      'Belize',
+      'Belice'
+    ],
+    capitals: ['Belmopan'],
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/bz.svg'
   },
   {
     code: 'BJ',
-    name: 'Bénin',
-    capital: 'Porto-Novo',
+    names: [
+      'Bénin',
+      'Benin'
+    ],
+    capitals: ['Porto-Novo'],
     continent: 'africa',
     flag: 'https://flagcdn.com/bj.svg'
   },
   {
-    code: 'BM',
-    name: 'Bermudes',
-    capital: 'Hamilton',
-    continent: 'northAmerica',
-    flag: 'https://flagcdn.com/bm.svg'
-  },
-  {
     code: 'BT',
-    name: 'Bhoutan',
-    capital: 'Thimphu',
+    names: [
+      'Bhoutan',
+      'Bhutan'
+    ],
+    capitals: [
+      'Thimphou',
+      'Thimphu'
+    ],
     continent: 'asia',
     flag: 'https://flagcdn.com/bt.svg'
   },
   {
+    code: 'BY',
+    names: [
+      'Biélorussie',
+      'Bélarus',
+      'Belarus'
+    ],
+    capitals: ['Minsk'],
+    continent: 'europe',
+    flag: 'https://flagcdn.com/by.svg'
+  },
+  {
+    code: 'MM',
+    names: [
+      'Myanmar',
+      'Birmanie'
+    ],
+    capitals: ['Naypyidaw'],
+    continent: 'asia',
+    flag: 'https://flagcdn.com/mm.svg'
+  },
+  {
     code: 'BO',
-    name: 'Bolivie',
-    capital: 'Sucre',
-    continent: 'northAmerica',
+    names: [
+      'Bolivie',
+      'Bolivia'
+    ],
+    capitals: [
+      'Sucre',
+      'La Paz'
+    ],
+    continent: 'southAmerica',
     flag: 'https://flagcdn.com/bo.svg'
   },
   {
     code: 'BA',
-    name: 'Bosnie-Herzégovine',
-    capital: 'Sarajevo',
+    names: [
+      'Bosnie-Herzégovine',
+      'Bosnie-et-Herzégovine',
+      'Bosnia and Herzegovina'
+    ],
+    capitals: ['Sarajevo'],
     continent: 'europe',
     flag: 'https://flagcdn.com/ba.svg'
   },
   {
     code: 'BW',
-    name: 'Botswana',
-    capital: 'Gaborone',
+    names: ['Botswana'],
+    capitals: ['Gaborone'],
     continent: 'africa',
     flag: 'https://flagcdn.com/bw.svg'
   },
   {
     code: 'BR',
-    name: 'Brésil',
-    capital: 'Brasília',
-    continent: 'northAmerica',
+    names: [
+      'Brésil',
+      'Brasil',
+      'Brazil'
+    ],
+    capitals: ['Brasília'],
+    continent: 'southAmerica',
     flag: 'https://flagcdn.com/br.svg'
   },
   {
-    code: 'VG',
-    name: 'Îles Vierges britanniques',
-    capital: 'Road Town',
-    continent: 'northAmerica',
-    flag: 'https://flagcdn.com/vg.svg'
-  },
-  {
     code: 'BN',
-    name: 'Brunei',
-    capital: '',
+    names: [
+      'Brunei',
+      'Brunei Darussalam'
+    ],
+    capitals: ['Bandar Seri Begawan'],
     continent: 'asia',
     flag: 'https://flagcdn.com/bn.svg'
   },
   {
     code: 'BG',
-    name: 'Bulgarie',
-    capital: 'Sofia',
+    names: [
+      'Bulgarie',
+      'Bulgaria'
+    ],
+    capitals: ['Sofia'],
     continent: 'europe',
     flag: 'https://flagcdn.com/bg.svg'
   },
   {
     code: 'BF',
-    name: 'Burkina Faso',
-    capital: 'Ouagadougou',
+    names: [
+      'Burkina Faso',
+      'Burkina'
+    ],
+    capitals: ['Ouagadougou'],
     continent: 'africa',
     flag: 'https://flagcdn.com/bf.svg'
   },
   {
     code: 'BI',
-    name: 'Burundi',
-    capital: 'Gitega',
+    names: ['Burundi'],
+    capitals: ['Gitega'],
     continent: 'africa',
     flag: 'https://flagcdn.com/bi.svg'
   },
   {
     code: 'KH',
-    name: 'Cambodge',
-    capital: 'Phnom Penh',
+    names: 'Cambodge',
+    capitals: 'Phnom Penh',
     continent: 'asia',
     flag: 'https://flagcdn.com/kh.svg'
   },
   {
     code: 'CM',
-    name: 'Cameroun',
-    capital: 'Yaoundé',
+    names: 'Cameroun',
+    capitals: 'Yaoundé',
     continent: 'africa',
     flag: 'https://flagcdn.com/cm.svg'
   },
   {
     code: 'CF',
-    name: 'République centrafricaine',
-    capital: 'Bangui',
+    names: 'République centrafricaine',
+    capitals: 'Bangui',
     continent: 'africa',
     flag: 'https://flagcdn.com/cf.svg'
   },
   {
     code: 'TD',
-    name: 'Tchad',
-    capital: 'N\'Djamena',
+    names: 'Tchad',
+    capitals: 'N\'Djamena',
     continent: 'africa',
     flag: 'https://flagcdn.com/td.svg'
   },
   {
     code: 'CO',
-    name: 'Colombie',
-    capital: 'Bogotá',
+    names: 'Colombie',
+    capitals: 'Bogotá',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/co.svg'
   },
   {
     code: 'CR',
-    name: 'Costa Rica',
-    capital: 'San José',
+    names: 'Costa Rica',
+    capitals: 'San José',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/cr.svg'
   },
   {
     code: 'HR',
-    name: 'Croatie',
-    capital: 'Zagreb',
+    names: 'Croatie',
+    capitals: 'Zagreb',
     continent: 'europe',
     flag: 'https://flagcdn.com/hr.svg'
   },
   {
     code: 'CU',
-    name: 'Cuba',
-    capital: 'Havana',
+    names: 'Cuba',
+    capitals: 'Havana',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/cu.svg'
   },
   {
     code: 'CW',
-    name: 'Curaçao',
-    capital: 'Willemstad',
+    names: 'Curaçao',
+    capitals: 'Willemstad',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/cw.svg'
   },
   {
     code: 'CZ',
-    name: 'Tchéquie',
-    capital: 'Prague',
+    names: 'Tchéquie',
+    capitals: 'Prague',
     continent: 'europe',
     flag: 'https://flagcdn.com/cz.svg'
   },
   {
     code: 'CI',
-    name: 'Côte d’Ivoire',
-    capital: 'Yamoussoukro',
+    names: 'Côte d’Ivoire',
+    capitals: 'Yamoussoukro',
     continent: 'africa',
     flag: 'https://flagcdn.com/ci.svg'
   },
   {
     code: 'KP',
-    name: 'Corée du Nord',
-    capital: 'Pyongyang',
+    names: 'Corée du Nord',
+    capitals: 'Pyongyang',
     continent: 'asia',
     flag: 'https://flagcdn.com/kp.svg'
   },
   {
     code: 'CD',
-    name: 'Congo-Kinshasa',
-    capital: 'Kinshasa',
+    names: 'Congo-Kinshasa',
+    capitals: 'Kinshasa',
     continent: 'africa',
     flag: 'https://flagcdn.com/cd.svg'
   },
   {
     code: 'DJ',
-    name: 'Djibouti',
-    capital: 'Djibouti',
+    names: 'Djibouti',
+    capitals: 'Djibouti',
     continent: 'africa',
     flag: 'https://flagcdn.com/dj.svg'
   },
   {
     code: 'DM',
-    name: 'Dominique',
-    capital: 'Roseau',
+    names: 'Dominique',
+    capitals: 'Roseau',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/dm.svg'
   },
   {
     code: 'DO',
-    name: 'République dominicaine',
-    capital: 'Santo Domingo',
+    names: 'République dominicaine',
+    capitals: 'Santo Domingo',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/do.svg'
   },
   {
     code: 'EC',
-    name: 'Équateur',
-    capital: 'Quito',
+    names: 'Équateur',
+    capitals: 'Quito',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/ec.svg'
   },
   {
     code: 'EG',
-    name: 'Égypte',
-    capital: 'Le Caire',
+    names: 'Égypte',
+    capitals: 'Le Caire',
     continent: 'africa',
     flag: 'https://flagcdn.com/eg.svg'
   },
   {
     code: 'SV',
-    name: 'Salvador',
-    capital: 'San Salvador',
+    names: 'Salvador',
+    capitals: 'San Salvador',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/sv.svg'
   },
   {
     code: 'GQ',
-    name: 'Guinée équatoriale',
-    capital: 'Malabo',
+    names: 'Guinée équatoriale',
+    capitals: 'Malabo',
     continent: 'africa',
     flag: 'https://flagcdn.com/gq.svg'
   },
   {
     code: 'ER',
-    name: 'Érythrée',
-    capital: 'Asmara',
+    names: 'Érythrée',
+    capitals: 'Asmara',
     continent: 'africa',
     flag: 'https://flagcdn.com/er.svg'
   },
   {
     code: 'EE',
-    name: 'Estonie',
-    capital: 'Tallinn',
+    names: 'Estonie',
+    capitals: 'Tallinn',
     continent: 'europe',
     flag: 'https://flagcdn.com/ee.svg'
   },
   {
     code: 'ET',
-    name: 'Éthiopie',
-    capital: 'Addis Ababa',
+    names: 'Éthiopie',
+    capitals: 'Addis Ababa',
     continent: 'africa',
     flag: 'https://flagcdn.com/et.svg'
   },
   {
     code: 'FI',
-    name: 'Finlande',
-    capital: 'Helsinki',
+    names: 'Finlande',
+    capitals: 'Helsinki',
     continent: 'europe',
     flag: 'https://flagcdn.com/fi.svg'
   },
   {
     code: 'GF',
-    name: 'Guyane française',
-    capital: 'Cayenne',
+    names: 'Guyane française',
+    capitals: 'Cayenne',
     continent: 'southAmerica',
     flag: 'https://flagcdn.com/gf.svg'
   },
   {
     code: 'GA',
-    name: 'Gabon',
-    capital: 'Libreville',
+    names: 'Gabon',
+    capitals: 'Libreville',
     continent: 'africa',
     flag: 'https://flagcdn.com/ga.svg'
   },
   {
     code: 'GE',
-    name: 'Géorgie',
-    capital: 'Tbilisi',
+    names: 'Géorgie',
+    capitals: 'Tbilisi',
     continent: 'asia',
     flag: 'https://flagcdn.com/ge.svg'
   },
   {
-    code: 'DE',
-    name: 'Allemagne',
-    capital: 'Berlin',
-    continent: 'europe',
-    flag: 'https://flagcdn.com/de.svg'
-  },
-  {
     code: 'GH',
-    name: 'Ghana',
-    capital: 'Accra',
+    names: 'Ghana',
+    capitals: 'Accra',
     continent: 'africa',
     flag: 'https://flagcdn.com/gh.svg'
   },
   {
     code: 'GL',
-    name: 'Groenland',
-    capital: 'Nuuk',
+    names: 'Groenland',
+    capitals: 'Nuuk',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/gl.svg'
   },
   {
     code: 'GD',
-    name: 'Grenade',
-    capital: 'St. George\'s',
+    names: 'Grenade',
+    capitals: 'St. George\'s',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/gd.svg'
   },
   {
     code: 'GU',
-    name: 'Guam',
-    capital: 'Hagåtña',
+    names: 'Guam',
+    capitals: 'Hagåtña',
     continent: 'oceania',
     flag: 'https://flagcdn.com/gu.svg'
   },
   {
     code: 'GT',
-    name: 'Guatemala',
-    capital: 'Guatemala City',
+    names: 'Guatemala',
+    capitals: 'Guatemala City',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/gt.svg'
   },
   {
     code: 'GN',
-    name: 'Guinée',
-    capital: 'Conakry',
+    names: 'Guinée',
+    capitals: 'Conakry',
     continent: 'africa',
     flag: 'https://flagcdn.com/gn.svg'
   },
   {
     code: 'GW',
-    name: 'Guinée-Bissau',
-    capital: 'Bissau',
+    names: 'Guinée-Bissau',
+    capitals: 'Bissau',
     continent: 'africa',
     flag: 'https://flagcdn.com/gw.svg'
   },
   {
     code: 'GY',
-    name: 'Guyana',
-    capital: 'Georgetown',
+    names: 'Guyana',
+    capitals: 'Georgetown',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/gy.svg'
   },
   {
     code: 'HT',
-    name: 'Haïti',
-    capital: 'Port-au-Prince',
+    names: 'Haïti',
+    capitals: 'Port-au-Prince',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/ht.svg'
   },
   {
     code: 'HN',
-    name: 'Honduras',
-    capital: 'Tegucigalpa',
+    names: 'Honduras',
+    capitals: 'Tegucigalpa',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/hn.svg'
   },
   {
     code: 'HU',
-    name: 'Hongrie',
-    capital: 'Budapest',
+    names: 'Hongrie',
+    capitals: 'Budapest',
     continent: 'europe',
     flag: 'https://flagcdn.com/hu.svg'
   },
   {
     code: 'IS',
-    name: 'Islande',
-    capital: 'Reykjavik',
+    names: 'Islande',
+    capitals: 'Reykjavik',
     continent: 'europe',
     flag: 'https://flagcdn.com/is.svg'
   },
   {
     code: 'IN',
-    name: 'Inde',
-    capital: 'New Delhi',
+    names: 'Inde',
+    capitals: 'New Delhi',
     continent: 'asia',
     flag: 'https://flagcdn.com/in.svg'
   },
   {
     code: 'IR',
-    name: 'Iran',
-    capital: 'Téhéran',
+    names: 'Iran',
+    capitals: 'Téhéran',
     continent: 'asia',
     flag: 'https://flagcdn.com/ir.svg'
   },
   {
     code: 'IQ',
-    name: 'Irak',
-    capital: 'Bagdad',
+    names: 'Irak',
+    capitals: 'Bagdad',
     continent: 'asia',
     flag: 'https://flagcdn.com/iq.svg'
   },
   {
     code: 'IE',
-    name: 'Irlande',
-    capital: 'Dublin',
+    names: 'Irlande',
+    capitals: 'Dublin',
     continent: 'europe',
     flag: 'https://flagcdn.com/ie.svg'
   },
   {
     code: 'IL',
-    name: 'Israël',
-    capital: 'Jérusalem',
+    names: 'Israël',
+    capitals: 'Jérusalem',
     continent: 'asia',
     flag: 'https://flagcdn.com/il.svg'
   },
   {
     code: 'JM',
-    name: 'Jamaïque',
-    capital: 'Kingston',
+    names: 'Jamaïque',
+    capitals: 'Kingston',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/jm.svg'
   },
   {
     code: 'JO',
-    name: 'Jordanie',
-    capital: 'Amman',
+    names: 'Jordanie',
+    capitals: 'Amman',
     continent: 'asia',
     flag: 'https://flagcdn.com/jo.svg'
   },
   {
     code: 'KZ',
-    name: 'Kazakhstan',
-    capital: 'Astana',
+    names: 'Kazakhstan',
+    capitals: 'Astana',
     continent: 'asia',
     flag: 'https://flagcdn.com/kz.svg'
   },
   {
     code: 'KE',
-    name: 'Kenya',
-    capital: 'Nairobi',
+    names: 'Kenya',
+    capitals: 'Nairobi',
     continent: 'africa',
     flag: 'https://flagcdn.com/ke.svg'
   },
   {
     code: 'XK',
-    name: 'Kosovo',
-    capital: 'Pristina',
+    names: 'Kosovo',
+    capitals: 'Pristina',
     continent: 'europe',
     flag: 'https://flagcdn.com/xk.svg'
   },
   {
     code: 'KW',
-    name: 'Koweït',
-    capital: 'Kuwait City',
+    names: 'Koweït',
+    capitals: 'Kuwait City',
     continent: 'asia',
     flag: 'https://flagcdn.com/kw.svg'
   },
   {
     code: 'KG',
-    name: 'Kirghizstan',
-    capital: 'Bishkek',
+    names: 'Kirghizstan',
+    capitals: 'Bishkek',
     continent: 'asia',
     flag: 'https://flagcdn.com/kg.svg'
   },
   {
     code: 'LA',
-    name: 'Laos',
-    capital: 'Vientiane',
+    names: 'Laos',
+    capitals: 'Vientiane',
     continent: 'asia',
     flag: 'https://flagcdn.com/la.svg'
   },
   {
     code: 'LV',
-    name: 'Lettonie',
-    capital: 'Riga',
+    names: 'Lettonie',
+    capitals: 'Riga',
     continent: 'europe',
     flag: 'https://flagcdn.com/lv.svg'
   },
   {
     code: 'LB',
-    name: 'Liban',
-    capital: 'Beyrouth',
+    names: 'Liban',
+    capitals: 'Beyrouth',
     continent: 'asia',
     flag: 'https://flagcdn.com/lb.svg'
   },
   {
     code: 'LS',
-    name: 'Lesotho',
-    capital: 'Maseru',
+    names: 'Lesotho',
+    capitals: 'Maseru',
     continent: 'africa',
     flag: 'https://flagcdn.com/ls.svg'
   },
   {
     code: 'LR',
-    name: 'Liberia',
-    capital: 'Monrovia',
+    names: 'Liberia',
+    capitals: 'Monrovia',
     continent: 'africa',
     flag: 'https://flagcdn.com/lr.svg'
   },
   {
     code: 'LY',
-    name: 'Libye',
-    capital: 'Tripoli',
+    names: 'Libye',
+    capitals: 'Tripoli',
     continent: 'africa',
     flag: 'https://flagcdn.com/ly.svg'
   },
   {
     code: 'LT',
-    name: 'Lituanie',
-    capital: 'Vilnius',
+    names: 'Lituanie',
+    capitals: 'Vilnius',
     continent: 'europe',
     flag: 'https://flagcdn.com/lt.svg'
   },
   {
     code: 'LU',
-    name: 'Luxembourg',
-    capital: 'Luxembourg',
+    names: 'Luxembourg',
+    capitals: 'Luxembourg',
     continent: 'europe',
     flag: 'https://flagcdn.com/lu.svg'
   },
   {
     code: 'MK',
-    name: 'Macédoine du Nord',
-    capital: '',
+    names: 'Macédoine du Nord',
+    capitals: '',
     continent: 'europe',
     flag: 'https://flagcdn.com/mk.svg'
   },
   {
     code: 'MG',
-    name: 'Madagascar',
-    capital: 'Antananarivo',
+    names: 'Madagascar',
+    capitals: 'Antananarivo',
     continent: 'africa',
     flag: 'https://flagcdn.com/mg.svg'
   },
   {
     code: 'MW',
-    name: 'Malawi',
-    capital: 'Lilongwe',
+    names: 'Malawi',
+    capitals: 'Lilongwe',
     continent: 'africa',
     flag: 'https://flagcdn.com/mw.svg'
   },
   {
     code: 'MV',
-    name: 'Maldives',
-    capital: 'Malé',
+    names: 'Maldives',
+    capitals: 'Malé',
     continent: 'asia',
     flag: 'https://flagcdn.com/mv.svg'
   },
   {
     code: 'ML',
-    name: 'Mali',
-    capital: 'Bamako',
+    names: 'Mali',
+    capitals: 'Bamako',
     continent: 'africa',
     flag: 'https://flagcdn.com/ml.svg'
   },
   {
     code: 'MH',
-    name: 'Îles Marshall',
-    capital: 'Majuro',
+    names: 'Îles Marshall',
+    capitals: 'Majuro',
     continent: 'oceania',
     flag: 'https://flagcdn.com/mh.svg'
   },
   {
     code: 'MQ',
-    name: 'Martinique',
-    capital: 'Fort-de-France',
+    names: 'Martinique',
+    capitals: 'Fort-de-France',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/mq.svg'
   },
   {
     code: 'MR',
-    name: 'Mauritanie',
-    capital: 'Nouakchott',
+    names: 'Mauritanie',
+    capitals: 'Nouakchott',
     continent: 'africa',
     flag: 'https://flagcdn.com/mr.svg'
   },
   {
     code: 'YT',
-    name: 'Mayotte',
-    capital: 'Mamoudzou',
+    names: 'Mayotte',
+    capitals: 'Mamoudzou',
     continent: 'africa',
     flag: 'https://flagcdn.com/yt.svg'
   },
   {
     code: 'MX',
-    name: 'Mexique',
-    capital: 'Mexico City',
+    names: 'Mexique',
+    capitals: 'Mexico City',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/mx.svg'
   },
   {
     code: 'MD',
-    name: 'Moldavie',
-    capital: 'Chișinău',
+    names: 'Moldavie',
+    capitals: 'Chișinău',
     continent: 'europe',
     flag: 'https://flagcdn.com/md.svg'
   },
   {
     code: 'MN',
-    name: 'Mongolie',
-    capital: 'Ulan Bator',
+    names: 'Mongolie',
+    capitals: 'Ulan Bator',
     continent: 'asia',
     flag: 'https://flagcdn.com/mn.svg'
   },
   {
     code: 'ME',
-    name: 'Monténégro',
-    capital: 'Podgorica',
+    names: 'Monténégro',
+    capitals: 'Podgorica',
     continent: 'europe',
     flag: 'https://flagcdn.com/me.svg'
   },
   {
     code: 'MS',
-    name: 'Montserrat',
-    capital: 'Plymouth',
+    names: 'Montserrat',
+    capitals: 'Plymouth',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/ms.svg'
   },
   {
     code: 'MA',
-    name: 'Maroc',
-    capital: 'Rabat',
+    names: 'Maroc',
+    capitals: 'Rabat',
     continent: 'africa',
     flag: 'https://flagcdn.com/ma.svg'
   },
   {
     code: 'MZ',
-    name: 'Mozambique',
-    capital: 'Maputo',
+    names: 'Mozambique',
+    capitals: 'Maputo',
     continent: 'africa',
     flag: 'https://flagcdn.com/mz.svg'
   },
   {
-    code: 'MM',
-    name: 'Myanmar (Birmanie)',
-    capital: '',
-    continent: 'asia',
-    flag: 'https://flagcdn.com/mm.svg'
-  },
-  {
     code: 'NA',
-    name: 'Namibie',
-    capital: 'Windhoek',
+    names: 'Namibie',
+    capitals: 'Windhoek',
     continent: 'africa',
     flag: 'https://flagcdn.com/na.svg'
   },
   {
     code: 'NR',
-    name: 'Nauru',
-    capital: 'Yaren',
+    names: 'Nauru',
+    capitals: 'Yaren',
     continent: 'oceania',
     flag: 'https://flagcdn.com/nr.svg'
   },
   {
     code: 'NP',
-    name: 'Népal',
-    capital: 'Kathmandu',
+    names: 'Népal',
+    capitals: 'Kathmandu',
     continent: 'asia',
     flag: 'https://flagcdn.com/np.svg'
   },
   {
     code: 'NL',
-    name: 'Pays-Bas',
-    capital: 'Amsterdam',
+    names: 'Pays-Bas',
+    capitals: 'Amsterdam',
     continent: 'europe',
     flag: 'https://flagcdn.com/nl.svg'
   },
   {
     code: 'BQBO',
-    name: 'Pays-Bas caribéens',
-    capital: 'Kralendijk',
+    names: 'Pays-Bas caribéens',
+    capitals: 'Kralendijk',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/bqbo.svg'
   },
   {
     code: 'NI',
-    name: 'Nicaragua',
-    capital: 'Managua',
+    names: 'Nicaragua',
+    capitals: 'Managua',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/ni.svg'
   },
   {
     code: 'NE',
-    name: 'Niger',
-    capital: 'Niamey',
+    names: 'Niger',
+    capitals: 'Niamey',
     continent: 'africa',
     flag: 'https://flagcdn.com/ne.svg'
   },
   {
     code: 'NG',
-    name: 'Nigeria',
-    capital: 'Abuja',
+    names: 'Nigeria',
+    capitals: 'Abuja',
     continent: 'africa',
     flag: 'https://flagcdn.com/ng.svg'
   },
   {
     code: 'PK',
-    name: 'Pakistan',
-    capital: 'Islamabad',
+    names: 'Pakistan',
+    capitals: 'Islamabad',
     continent: 'asia',
     flag: 'https://flagcdn.com/pk.svg'
   },
   {
     code: 'PW',
-    name: 'Palaos',
-    capital: 'Ngerulmud',
+    names: 'Palaos',
+    capitals: 'Ngerulmud',
     continent: 'oceania',
     flag: 'https://flagcdn.com/pw.svg'
   },
   {
     code: 'PS',
-    name: 'Palestine',
-    capital: '',
+    names: 'Palestine',
+    capitals: '',
     continent: 'asia',
     flag: 'https://flagcdn.com/ps.svg'
   },
   {
     code: 'PA',
-    name: 'Panama',
-    capital: 'Panama City',
+    names: 'Panama',
+    capitals: 'Panama City',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/pa.svg'
   },
   {
     code: 'PY',
-    name: 'Paraguay',
-    capital: 'Asunción',
+    names: 'Paraguay',
+    capitals: 'Asunción',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/py.svg'
   },
   {
     code: 'PE',
-    name: 'Pérou',
-    capital: 'Lima',
+    names: 'Pérou',
+    capitals: 'Lima',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/pe.svg'
   },
   {
     code: 'PL',
-    name: 'Pologne',
-    capital: 'Varsovie',
+    names: 'Pologne',
+    capitals: 'Varsovie',
     continent: 'europe',
     flag: 'https://flagcdn.com/pl.svg'
   },
   {
     code: 'PT',
-    name: 'Portugal',
-    capital: 'Lisbon',
+    names: 'Portugal',
+    capitals: 'Lisbon',
     continent: 'europe',
     flag: 'https://flagcdn.com/pt.svg'
   },
   {
     code: 'QA',
-    name: 'Qatar',
-    capital: 'Doha',
+    names: 'Qatar',
+    capitals: 'Doha',
     continent: 'asia',
     flag: 'https://flagcdn.com/qa.svg'
   },
   {
     code: 'CG',
-    name: 'Congo-Brazzaville',
-    capital: '',
+    names: 'Congo-Brazzaville',
+    capitals: '',
     continent: 'africa',
     flag: 'https://flagcdn.com/cg.svg'
   },
   {
     code: 'KR',
-    name: 'Corée du Sud',
-    capital: 'Séoul',
+    names: 'Corée du Sud',
+    capitals: 'Séoul',
     continent: 'asia',
     flag: 'https://flagcdn.com/kr.svg'
   },
   {
     code: 'RE',
-    name: 'La Réunion',
-    capital: 'Saint-Denis',
+    names: 'La Réunion',
+    capitals: 'Saint-Denis',
     continent: 'africa',
     flag: 'https://flagcdn.com/re.svg'
   },
   {
     code: 'RO',
-    name: 'Roumanie',
-    capital: 'Bucharest',
+    names: 'Roumanie',
+    capitals: 'Bucharest',
     continent: 'europe',
     flag: 'https://flagcdn.com/ro.svg'
   },
   {
     code: 'RW',
-    name: 'Rwanda',
-    capital: 'Kigali',
+    names: 'Rwanda',
+    capitals: 'Kigali',
     continent: 'africa',
     flag: 'https://flagcdn.com/rw.svg'
   },
   {
     code: 'BQSA',
-    name: 'Saba',
-    capital: 'The Bottom',
+    names: 'Saba',
+    capitals: 'The Bottom',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/bqsa.svg'
   },
   {
     code: 'LC',
-    name: 'Sainte-Lucie',
-    capital: 'Castries',
+    names: 'Sainte-Lucie',
+    capitals: 'Castries',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/lc.svg'
   },
   {
     code: 'VC',
-    name: 'Saint-Vincent-et-les Grenadines',
-    capital: 'Kingstown',
+    names: 'Saint-Vincent-et-les Grenadines',
+    capitals: 'Kingstown',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/vc.svg'
   },
   {
     code: 'BL',
-    name: 'Saint-Barthélemy',
-    capital: 'Gustavia',
+    names: 'Saint-Barthélemy',
+    capitals: 'Gustavia',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/bl.svg'
   },
   {
     code: 'MF',
-    name: 'Saint-Martin',
-    capital: 'Marigot',
+    names: 'Saint-Martin',
+    capitals: 'Marigot',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/mf.svg'
   },
   {
-    code: 'SA',
-    name: 'Arabie saoudite',
-    capital: 'Riyad',
-    continent: 'asia',
-    flag: 'https://flagcdn.com/sa.svg'
-  },
-  {
     code: 'SN',
-    name: 'Sénégal',
-    capital: 'Dakar',
+    names: 'Sénégal',
+    capitals: 'Dakar',
     continent: 'africa',
     flag: 'https://flagcdn.com/sn.svg'
   },
   {
     code: 'RS',
-    name: 'Serbie',
-    capital: 'Belgrade',
+    names: 'Serbie',
+    capitals: 'Belgrade',
     continent: 'europe',
     flag: 'https://flagcdn.com/rs.svg'
   },
   {
     code: 'SL',
-    name: 'Sierra Leone',
-    capital: 'Freetown',
+    names: 'Sierra Leone',
+    capitals: 'Freetown',
     continent: 'africa',
     flag: 'https://flagcdn.com/sl.svg'
   },
   {
     code: 'SX',
-    name: 'Saint-Martin (partie néerlandaise)',
-    capital: '',
+    names: 'Saint-Martin (partie néerlandaise)',
+    capitals: '',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/sx.svg'
   },
   {
     code: 'SK',
-    name: 'Slovaquie',
-    capital: 'Bratislava',
+    names: 'Slovaquie',
+    capitals: 'Bratislava',
     continent: 'europe',
     flag: 'https://flagcdn.com/sk.svg'
   },
   {
     code: 'SI',
-    name: 'Slovénie',
-    capital: 'Ljubljana',
+    names: 'Slovénie',
+    capitals: 'Ljubljana',
     continent: 'europe',
     flag: 'https://flagcdn.com/si.svg'
   },
   {
     code: 'SO',
-    name: 'Somalie',
-    capital: 'Mogadishu',
+    names: 'Somalie',
+    capitals: 'Mogadishu',
     continent: 'africa',
     flag: 'https://flagcdn.com/so.svg'
   },
   {
     code: 'ZA',
-    name: 'africa du Sud',
-    capital: 'Pretoria',
+    names: 'africa du Sud',
+    capitals: 'Pretoria',
     continent: 'africa',
     flag: 'https://flagcdn.com/za.svg'
   },
   {
     code: 'SS',
-    name: 'Soudan du Sud',
-    capital: 'Juba',
+    names: 'Soudan du Sud',
+    capitals: 'Juba',
     continent: 'africa',
     flag: 'https://flagcdn.com/ss.svg'
   },
   {
     code: 'ES',
-    name: 'Espagne',
-    capital: 'Madrid',
+    names: 'Espagne',
+    capitals: 'Madrid',
     continent: 'europe',
     flag: 'https://flagcdn.com/es.svg'
   },
   {
     code: 'LK',
-    name: 'Sri Lanka',
-    capital: 'Sri Jayawardenapura Kotte',
+    names: 'Sri Lanka',
+    capitals: 'Sri Jayawardenapura Kotte',
     continent: 'asia',
     flag: 'https://flagcdn.com/lk.svg'
   },
   {
     code: 'BQSE',
-    name: 'Saint-Eustache',
-    capital: 'Oranjestad',
+    names: 'Saint-Eustache',
+    capitals: 'Oranjestad',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/bqse.svg'
   },
   {
     code: 'SD',
-    name: 'Soudan',
-    capital: 'Khartoum',
+    names: 'Soudan',
+    capitals: 'Khartoum',
     continent: 'africa',
     flag: 'https://flagcdn.com/sd.svg'
   },
   {
     code: 'SR',
-    name: 'Suriname',
-    capital: 'Paramaribo',
+    names: 'Surinames',
+    capitals: 'Paramaribo',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/sr.svg'
   },
   {
     code: 'SZ',
-    name: 'Eswatini',
-    capital: '',
+    names: 'Eswatini',
+    capitals: '',
     continent: 'africa',
     flag: 'https://flagcdn.com/sz.svg'
   },
   {
     code: 'SE',
-    name: 'Suède',
-    capital: 'Stockholm',
+    names: 'Suède',
+    capitals: 'Stockholm',
     continent: 'europe',
     flag: 'https://flagcdn.com/se.svg'
   },
   {
     code: 'CH',
-    name: 'Suisse',
-    capital: 'Berne',
+    names: 'Suisse',
+    capitals: 'Berne',
     continent: 'europe',
     flag: 'https://flagcdn.com/ch.svg'
   },
   {
     code: 'SY',
-    name: 'Syrie',
-    capital: 'Damas',
+    names: 'Syrie',
+    capitals: 'Damas',
     continent: 'asia',
     flag: 'https://flagcdn.com/sy.svg'
   },
   {
     code: 'TW',
-    name: 'Taïwan',
-    capital: 'Taipei',
+    names: 'Taïwan',
+    capitals: 'Taipei',
     continent: 'asia',
     flag: 'https://flagcdn.com/tw.svg'
   },
   {
     code: 'TJ',
-    name: 'Tadjikistan',
-    capital: 'Dushanbe',
+    names: 'Tadjikistan',
+    capitals: 'Dushanbe',
     continent: 'asia',
     flag: 'https://flagcdn.com/tj.svg'
   },
   {
     code: 'TZ',
-    name: 'Tanzanie',
-    capital: 'Dodoma',
+    names: 'Tanzanie',
+    capitals: 'Dodoma',
     continent: 'africa',
     flag: 'https://flagcdn.com/tz.svg'
   },
   {
     code: 'TH',
-    name: 'Thaïlande',
-    capital: 'Bangkok',
+    names: 'Thaïlande',
+    capitals: 'Bangkok',
     continent: 'asia',
     flag: 'https://flagcdn.com/th.svg'
   },
   {
     code: 'GM',
-    name: 'Gambie',
-    capital: '',
+    names: 'Gambie',
+    capitals: '',
     continent: 'africa',
     flag: 'https://flagcdn.com/gm.svg'
   },
   {
     code: 'TL',
-    name: 'Timor oriental',
-    capital: '',
+    names: 'Timor oriental',
+    capitals: '',
     continent: 'oceania',
     flag: 'https://flagcdn.com/tl.svg'
   },
   {
     code: 'TG',
-    name: 'Togo',
-    capital: 'Lomé',
+    names: 'Togo',
+    capitals: 'Lomé',
     continent: 'africa',
     flag: 'https://flagcdn.com/tg.svg'
   },
   {
     code: 'TN',
-    name: 'Tunisie',
-    capital: 'Tunis',
+    names: 'Tunisie',
+    capitals: 'Tunis',
     continent: 'africa',
     flag: 'https://flagcdn.com/tn.svg'
   },
   {
     code: 'TM',
-    name: 'Turkménistan',
-    capital: 'Ashgabat',
+    names: 'Turkménistan',
+    capitals: 'Ashgabat',
     continent: 'asia',
     flag: 'https://flagcdn.com/tm.svg'
   },
   {
     code: 'TV',
-    name: 'Tuvalu',
-    capital: 'Funafuti',
+    names: 'Tuvalu',
+    capitals: 'Funafuti',
     continent: 'oceania',
     flag: 'https://flagcdn.com/tv.svg'
   },
   {
     code: 'UG',
-    name: 'Ouganda',
-    capital: 'Kampala',
+    names: 'Ouganda',
+    capitals: 'Kampala',
     continent: 'africa',
     flag: 'https://flagcdn.com/ug.svg'
   },
   {
     code: 'UA',
-    name: 'Ukraine',
-    capital: 'Kiev',
+    names: 'Ukraine',
+    capitals: 'Kiev',
     continent: 'europe',
     flag: 'https://flagcdn.com/ua.svg'
   },
   {
     code: 'AE',
-    name: 'Émirats arabes unis',
-    capital: 'Abou Dabi',
+    names: 'Émirats arabes unis',
+    capitals: 'Abou Dabi',
     continent: 'asia',
     flag: 'https://flagcdn.com/ae.svg'
   },
   {
     code: 'UY',
-    name: 'Uruguay',
-    capital: 'Montevideo',
+    names: 'Uruguay',
+    capitals: 'Montevideo',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/uy.svg'
   },
   {
     code: 'UZ',
-    name: 'Ouzbékistan',
-    capital: 'Tashkent',
+    names: 'Ouzbékistan',
+    capitals: 'Tashkent',
     continent: 'asia',
     flag: 'https://flagcdn.com/uz.svg'
   },
   {
     code: 'VE',
-    name: 'Venezuela',
-    capital: 'Caracas',
+    names: 'Venezuela',
+    capitals: 'Caracas',
     continent: 'northAmerica',
     flag: 'https://flagcdn.com/ve.svg'
   },
   {
     code: 'VN',
-    name: 'Viêt Nam',
-    capital: 'Hanoï',
+    names: 'Viêt Nam',
+    capitals: 'Hanoï',
     continent: 'asia',
     flag: 'https://flagcdn.com/vn.svg'
   },
   {
     code: 'EH',
-    name: 'Sahara occidental',
-    capital: 'El Aaiún',
+    names: 'Sahara occidental',
+    capitals: 'El Aaiún',
     continent: 'africa',
     flag: 'https://flagcdn.com/eh.svg'
   },
   {
     code: 'YE',
-    name: 'Yémen',
-    capital: 'Sana\'a',
+    names: 'Yémen',
+    capitals: 'Sana\'a',
     continent: 'asia',
     flag: 'https://flagcdn.com/ye.svg'
   },
   {
     code: 'ZM',
-    name: 'Zambie',
-    capital: 'Lusaka',
+    names: 'Zambie',
+    capitals: 'Lusaka',
     continent: 'africa',
     flag: 'https://flagcdn.com/zm.svg'
   },
   {
     code: 'ZW',
-    name: 'Zimbabwe',
-    capital: 'Harare',
+    names: 'Zimbabwe',
+    capitals: 'Harare',
     continent: 'africa',
     flag: 'https://flagcdn.com/zw.svg'
   },

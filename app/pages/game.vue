@@ -95,8 +95,9 @@ const {
   revealedCountries,
   wrongCountry,
   selectCountry,
+  matchedCountryName,
+  matchedCapital, 
   tasks,
-  roundFinished,
 
   startElement,
   targetElements,
@@ -274,7 +275,8 @@ function goBackToMenu() {
                 tasks.country ===
                 'pending'
                   ? 'Pays'
-                  : currentCountry.name
+                  : matchedCountryName ??
+                    currentCountry.names[0]
               }}
             </div>
 
@@ -303,7 +305,8 @@ function goBackToMenu() {
                 tasks.capital ===
                 'pending'
                   ? 'Capitale'
-                  : currentCountry.capital
+                  : matchedCapital ??
+                    currentCountry.capitals[0]
               }}
             </div>
 

@@ -12,6 +12,7 @@ import type {
   GameElement,
   GameSettings
 } from '../types/game'
+import { distance } from 'fastest-levenshtein'
 
 type TaskState =
   | 'pending'
@@ -72,6 +73,12 @@ export function useGame(
     string | null
   >(null)
 
+  const matchedCountryName =
+    ref<string | null>(null)
+
+  const matchedCapital =
+    ref<string | null>(null)
+
   const gameFinished =
     ref(false)
 
@@ -121,7 +128,10 @@ export function useGame(
         /[\u0300-\u036f]/g,
         ''
       )
-      .trim()
+      .replace(
+        /[-'’\s]/g,
+        ''
+      )
       .toLowerCase()
   }
 
@@ -217,6 +227,48 @@ export function useGame(
       return 'Entrée → question suivante'
     })
 
+    function findBestMatch(
+      input: string,
+      values: string[]
+    ) {
+      const normalizedInput =
+        normalizeString(input)
+
+      let bestMatch: string | null =
+        null
+
+      let bestDistance =
+        Infinity
+
+      for (const value of values) {
+        const d = distance(
+          normalizedInput,
+          normalizeString(value)
+        )
+
+        if (d < bestDistance) {
+          bestDistance = d
+          bestMatch = value
+        }
+      }
+
+      if (!bestMatch) {
+        return null
+      }
+
+      const maxDistance =
+        bestMatch.length <= 6
+          ? 1
+          : bestMatch.length <= 12
+            ? 2
+            : 3
+
+      return bestDistance <=
+        maxDistance
+        ? bestMatch
+        : null
+    }
+
   function validateCountry() {
     if (
       !currentCountry.value ||
@@ -226,13 +278,16 @@ export function useGame(
       return
     }
 
-    const success =
-      normalizeString(
-        answer.value
-      ) ===
-      normalizeString(
-        currentCountry.value.name
+    const matched =
+      findBestMatch(
+        answer.value,
+        currentCountry.value.names
       )
+
+    const success = !!matched
+
+    matchedCountryName.value =
+      matched
 
     tasks.country = success
       ? 'success'
@@ -256,13 +311,16 @@ export function useGame(
       return
     }
 
-    const success =
-      normalizeString(
-        answer.value
-      ) ===
-      normalizeString(
-        currentCountry.value.capital
+    const matched =
+      findBestMatch(
+        answer.value,
+        currentCountry.value.capitals
       )
+
+    const success = !!matched
+
+    matchedCapital.value =
+      matched
 
     tasks.capital = success
       ? 'success'
@@ -378,10 +436,10 @@ export function useGame(
       getRemainingCountries()
 
     revealedCountries.value = []
-
     wrongCountry.value = null
-
     revealedFlag.value = null
+    matchedCountryName.value = null
+    matchedCapital.value = null
 
     if (
       remainingCountries.length ===
@@ -416,20 +474,15 @@ export function useGame(
     generateCountries()
 
     score.value = 0
-
     usedCountries.value = []
-
     correctCountries.value = []
-
     revealedCountries.value = []
-
     wrongCountry.value = null
-
     revealedFlag.value = null
-
     gameFinished.value = false
-
     answer.value = ''
+    matchedCountryName.value = null
+    matchedCapital.value = null
 
     resetTasks()
 
@@ -496,6 +549,8 @@ export function useGame(
     restartGame,
     selectCountry,
     countries,
+    matchedCountryName,
+    matchedCapital,
 
     startElement,
     targetElements, 
