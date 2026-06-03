@@ -10,6 +10,8 @@ import {
 
 import { useMapCamera } from '../composables/useMapCamera'
 import type { MapConfig } from '~/maps/mapConfig';
+import { countries } from '~/data/countries';
+import { continentViews, type Continent } from '~/maps/worldViews';
 
 const props = defineProps<{
   currentCountryCode: string
@@ -21,6 +23,7 @@ const props = defineProps<{
   highlightCountry?: string
 
   mapConfig: MapConfig
+  continent?: Continent | null
 }>()
 
 const emit = defineEmits<{selectCountry: [code: string]}>()
@@ -38,6 +41,14 @@ const viewportHeight = ref(0)
 
 const isDragging = ref(false)
 const hasDragged = ref(false)
+
+const countryContinentMap =
+  new Map<string, Continent>(
+    countries.map(country => [
+      country.code,
+      country.continent
+    ])
+  )
 
 function updateViewport() {
   if (!containerRef.value) {
@@ -67,10 +78,21 @@ function applyCountryStyles() {
         'correct',
         'wrong',
         'revealed',
-        'highlighted'
+        'highlighted',
+        'disabled'
       )
 
       const code = path.id
+
+      const isInSelectedContinent =
+        !props.continent ||
+        countryContinentMap.get(code) ===
+          props.continent
+
+      if (!isInSelectedContinent) {
+        path.classList.add('disabled')
+        return
+      }
 
       if (
         props.startElement ===
@@ -150,6 +172,14 @@ function handleMapClick(
     return
   }
 
+  if (
+    props.continent &&
+    countryContinentMap.get(code) !==
+      props.continent
+  ) {
+    return
+  }
+
   emit('selectCountry', code)
 }
 
@@ -206,6 +236,12 @@ onMounted(async () => {
 
   updateViewport()
 
+  if (props.continent) {
+    camera.applyView(
+      continentViews[props.continent]
+    )
+  }
+
   applyCountryStyles()
 
   window.addEventListener(
@@ -225,13 +261,33 @@ onMounted(async () => {
 })
 
 watch(
+  () => props.continent,
+  continent => {
+    if (!continent) {
+      camera.applyView(
+        props.mapConfig.defaultView
+      )
+      return
+    }
+
+    camera.applyView(
+      continentViews[continent]
+    )
+  },
+  {
+    immediate: true
+  }
+)
+
+watch(
   () => [
     props.correctCountries,
     props.revealedCountries,
     props.usedCountries,
     props.wrongCountry,
     props.highlightCountry,
-    props.startElement
+    props.startElement, 
+    props.continent
   ],
   () => {
     applyCountryStyles()
@@ -308,7 +364,7 @@ watch(
 }
 
 .world-map path {
-  fill: #3f3f46;
+  fill: #505058;
 
   stroke: #18181b;
 
@@ -318,7 +374,7 @@ watch(
 }
 
 .world-map path:hover {
-  fill: #52525b;
+  fill: #6c6c75;
 
   cursor: pointer;
 }
@@ -332,10 +388,21 @@ watch(
 }
 
 .world-map path.revealed {
-  fill: #a1a1aa;
+  fill: #c2c2ca;
 }
 
 .world-map path.highlighted {
   fill: #eab308;
+}
+
+.world-map path.disabled {
+  fill: #424242;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.world-map path.disabled:hover {
+  fill: #424242;
+  cursor: default;
 }
 </style>

@@ -1,40 +1,58 @@
 import type { MapView } from "./mapConfig";
 
+export const worldView: MapView = {
+  x: 600,
+  y: 250,
+  zoom: 1.1
+}
+
+export const continents = [
+  'europe',
+  'africa',
+  'asia',
+  'northAmerica',
+  'southAmerica',
+  'oceania'
+] as const
+
+export type Continent =
+  (typeof continents)[number]
+
 export const continentViews: 
-  Record<string, MapView> = {
+  Record<Continent, MapView> = {
     europe: {
-      x: 950,
-      y: 180,
+      x: 550,
+      y: 100,
       zoom: 3
     },
 
     africa: {
-      x: 1000,
-      y: 350,
+      x: 600,
+      y: 283,
       zoom: 2.5
     },
 
     asia: {
-      x: 1350,
-      y: 220,
-      zoom: 2.3
+      x: 790,
+      y: 165,
+      zoom: 2.2
     },
 
     northAmerica: {
-      x: 420,
-      y: 220,
+      x: 310,
+      y: 130,
       zoom: 2.5
     },
 
     southAmerica: {
-      x: 620,
-      y: 520,
-      zoom: 3
+      x: 350,
+      y: 365,
+      zoom: 2.6
     },
 
     oceania: {
-      x: 1650,
-      y: 520,
-      zoom: 4
+      x: 1050,
+      y: 380,
+      zoom: 3
     }
   }

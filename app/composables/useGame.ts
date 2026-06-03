@@ -39,17 +39,12 @@ export function useGame(
   }
 
   const filteredCountries =
-    allCountries.filter(country => {
-      if (
-        settings.continent &&
-        country.continent !==
+    allCountries.filter(
+      country =>
+        !settings.continent ||
+        country.continent ===
           settings.continent
-      ) {
-        return false
-      }
-
-      return true
-    })
+    )
 
   const countries = ref<Country[]>([])
 
@@ -508,6 +503,8 @@ export function useGame(
     flagChoices,
     selectFlag,
     revealedFlag, 
-    maxScore
+    maxScore, 
+
+    continent: settings.continent
   }
 }

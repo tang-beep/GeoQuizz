@@ -1,3 +1,5 @@
+import type { Continent } from "~/maps/worldViews"
+
 export type GameElement =
   | 'flag'
   | 'country'
@@ -7,7 +9,7 @@ export type GameElement =
 export interface GameSettings {
   numberOfCountries: number
 
-  continent: string | null
+  continent: Continent | null
 
   startElement: GameElement
 

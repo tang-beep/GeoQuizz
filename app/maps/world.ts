@@ -1,4 +1,5 @@
-import type { MapConfig, MapView } from "./mapConfig";
+import type { MapConfig } from "./mapConfig";
+import { worldView } from "./worldViews";
 
 export const worldMap: MapConfig = {
   width: 2000,
@@ -9,9 +10,5 @@ export const worldMap: MapConfig = {
   minZoom: 1,
   maxZoom: 40,
 
-  defaultView: {
-    x: 600,
-    y: 250,
-    zoom: 1.1
-  }
+  defaultView: worldView
 }

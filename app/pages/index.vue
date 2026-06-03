@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Continent } from '~/maps/worldViews'
 import type {
   GameElement
 } from '../types/game'
@@ -7,7 +8,7 @@ const numberOfCountries =
   ref(20)
 
 const continent =
-  ref('')
+  ref<Continent | ''>('')
 
 const startElement =
   ref<GameElement>('flag')
@@ -183,31 +184,31 @@ function startGame() {
             Monde entier
           </option>
 
-          <option value="Europe">
+          <option value="europe">
             Europe
           </option>
 
-          <option value="Asie">
+          <option value="asia">
             Asie
           </option>
 
           <option
-            value="Amérique du Nord"
+            value="northAmerica"
           >
             Amérique du Nord
           </option>
 
           <option
-            value="Amérique du Sud"
+            value="southAmerica"
           >
             Amérique du Sud
           </option>
 
-          <option value="Afrique">
+          <option value="africa">
             Afrique
           </option>
 
-          <option value="Océanie">
+          <option value="oceania">
             Océanie
           </option>
         </select>

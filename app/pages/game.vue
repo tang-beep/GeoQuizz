@@ -4,8 +4,22 @@ import type {
   GameElement,
   GameSettings
 } from '../types/game'
+import { continents, type Continent } from '~/maps/worldViews'
 
 const route = useRoute()
+
+function isContinent(
+  value: string
+): value is Continent {
+  return continents.includes(
+    value as Continent
+  )
+}
+
+const continentQuery =
+  route.query.continent
+    ?.toString()
+    .trim()
 
 const settings: GameSettings = {
   numberOfCountries: Number(
@@ -13,9 +27,10 @@ const settings: GameSettings = {
   ),
 
   continent:
-    route.query.continent
-      ?.toString()
-      .trim() || null,
+    continentQuery &&
+      isContinent(continentQuery)
+        ? continentQuery
+        : null, 
 
   startElement:
     (
@@ -89,7 +104,9 @@ const {
   flagChoices,
   revealedFlag,
   selectFlag,
-  maxScore
+  maxScore, 
+
+  continent
 } = useGame(settings)
 
 function goBackToMenu() {
@@ -144,6 +161,7 @@ function goBackToMenu() {
           :map-config="
             worldMap
           "
+          :continent="continent"
           @select-country="
             selectCountry
           "
