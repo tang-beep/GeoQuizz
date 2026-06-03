@@ -344,24 +344,198 @@ export const countries: Country[] = [
   },
   {
     code: 'KH',
-    names: 'Cambodge',
-    capitals: 'Phnom Penh',
+    names: [
+      'Cambodge',
+      'Cambodia'
+    ],
+    capitals: ['Phnom Penh'],
     continent: 'asia',
     flag: 'https://flagcdn.com/kh.svg'
   },
   {
     code: 'CM',
-    names: 'Cameroun',
-    capitals: 'Yaoundé',
+    names: [
+      'Cameroun',
+      'Cameroon'
+    ],
+    capitals: ['Yaoundé'],
     continent: 'africa',
     flag: 'https://flagcdn.com/cm.svg'
   },
   {
+    code: 'CA',
+    names: [
+      'Canada',
+      'Cameroon'
+    ],
+    capitals: ['Ottawa'],
+    continent: 'northAmerica',
+    flag: 'https://flagcdn.com/ca.svg'
+  },
+  {
+    code: 'CV',
+    names: [
+      'Cap-Vert',
+      'Cabo Verde',
+      'Cape Verde'
+    ],
+    capitals: ['Praia'],
+    continent: 'africa',
+    flag: 'https://flagcdn.com/cv.svg'
+  },
+  {
     code: 'CF',
-    names: 'République centrafricaine',
-    capitals: 'Bangui',
+    names: [
+      'République centrafricaine', 
+      'Centrafrique',
+      'Central African Republic'
+    ],
+    capitals: ['Bangui'],
     continent: 'africa',
     flag: 'https://flagcdn.com/cf.svg'
+  },
+  {
+    code: 'CL',
+    names: [
+      'Chili', 
+      'Chile'
+    ],
+    capitals: ['Santiago'],
+    continent: 'southAmerica',
+    flag: 'https://flagcdn.com/cl.svg'
+  },
+  {
+    code: 'CN',
+    names: [
+      'Chine', 
+      'China'
+    ],
+    capitals: [
+      'Beijing',
+      'Pékin'
+    ],
+    continent: 'asia',
+    flag: 'https://flagcdn.com/cn.svg'
+  },
+  {
+    code: 'CY',
+    names: [
+      'Chypre', 
+      'Cyprus'
+    ],
+    capitals: [
+      'Nicosie',
+      'Nicosia'
+    ],
+    continent: 'asia',
+    flag: 'https://flagcdn.com/cy.svg'
+  },
+  {
+    code: 'CO',
+    names: [
+      'Colombie',
+      'Colombia'
+    ],
+    capitals: [
+      'Bogotá',
+      'Bogotá'],
+    continent: 'southAmerica',
+    flag: 'https://flagcdn.com/co.svg'
+  },
+  {
+    code: 'KM',
+    names: [
+      'Comores',
+      'Comoros'
+    ],
+    capitals: [
+      'Moroni'
+    ],
+    continent: 'africa',
+    flag: 'https://flagcdn.com/km.svg'
+  },
+  {
+    code: 'CG',
+    names: [
+      'Congo-Brazzaville',
+      'Congo'
+    ],
+    capitals: ['Brazzaville'],
+    continent: 'africa',
+    flag: 'https://flagcdn.com/cg.svg'
+  },
+  {
+    code: 'CD',
+    names: [
+      'Congo-Kinshasa',
+      'Congo',
+      'république démocratique du Congo',
+      'RDC',
+      'Democratic Republic of the Congo'
+    ],
+    capitals: ['Kinshasa'],
+    continent: 'africa',
+    flag: 'https://flagcdn.com/cd.svg'
+  },
+  {
+    code: 'KP',
+    names: [
+      'Corée du Nord',
+      'North Korea'
+    ],
+    capitals: ['Pyongyang'],
+    continent: 'asia',
+    flag: 'https://flagcdn.com/kp.svg'
+  },
+  {
+    code: 'KR',
+    names: [
+      'Corée du Sud',
+      'South Korea'
+    ],
+    capitals: [
+      'Séoul',
+      'Seoul'
+    ],
+    continent: 'asia',
+    flag: 'https://flagcdn.com/kr.svg'
+  },
+  {
+    code: 'CR',
+    names: ['Costa Rica'],
+    capitals: ['San José'],
+    continent: 'northAmerica',
+    flag: 'https://flagcdn.com/cr.svg'
+  },
+  {
+    code: 'CI',
+    names: [
+      'Côte d’Ivoire',
+      'Ivory Coast'
+    ],
+    capitals: ['Yamoussoukro'],
+    continent: 'africa',
+    flag: 'https://flagcdn.com/ci.svg'
+  },
+  {
+    code: 'HR',
+    names: [
+      'Croatie',
+      'Croatia'
+    ],
+    capitals: ['Zagreb'],
+    continent: 'europe',
+    flag: 'https://flagcdn.com/hr.svg'
+  },
+  {
+    code: 'CU',
+    names: ['Cuba'],
+    capitals: [
+      'La Havane',
+      'Havana'
+    ],
+    continent: 'northAmerica',
+    flag: 'https://flagcdn.com/cu.svg'
   },
   {
     code: 'TD',
@@ -371,67 +545,11 @@ export const countries: Country[] = [
     flag: 'https://flagcdn.com/td.svg'
   },
   {
-    code: 'CO',
-    names: 'Colombie',
-    capitals: 'Bogotá',
-    continent: 'northAmerica',
-    flag: 'https://flagcdn.com/co.svg'
-  },
-  {
-    code: 'CR',
-    names: 'Costa Rica',
-    capitals: 'San José',
-    continent: 'northAmerica',
-    flag: 'https://flagcdn.com/cr.svg'
-  },
-  {
-    code: 'HR',
-    names: 'Croatie',
-    capitals: 'Zagreb',
-    continent: 'europe',
-    flag: 'https://flagcdn.com/hr.svg'
-  },
-  {
-    code: 'CU',
-    names: 'Cuba',
-    capitals: 'Havana',
-    continent: 'northAmerica',
-    flag: 'https://flagcdn.com/cu.svg'
-  },
-  {
-    code: 'CW',
-    names: 'Curaçao',
-    capitals: 'Willemstad',
-    continent: 'northAmerica',
-    flag: 'https://flagcdn.com/cw.svg'
-  },
-  {
     code: 'CZ',
     names: 'Tchéquie',
     capitals: 'Prague',
     continent: 'europe',
     flag: 'https://flagcdn.com/cz.svg'
-  },
-  {
-    code: 'CI',
-    names: 'Côte d’Ivoire',
-    capitals: 'Yamoussoukro',
-    continent: 'africa',
-    flag: 'https://flagcdn.com/ci.svg'
-  },
-  {
-    code: 'KP',
-    names: 'Corée du Nord',
-    capitals: 'Pyongyang',
-    continent: 'asia',
-    flag: 'https://flagcdn.com/kp.svg'
-  },
-  {
-    code: 'CD',
-    names: 'Congo-Kinshasa',
-    capitals: 'Kinshasa',
-    continent: 'africa',
-    flag: 'https://flagcdn.com/cd.svg'
   },
   {
     code: 'DJ',
@@ -985,20 +1103,6 @@ export const countries: Country[] = [
     capitals: 'Doha',
     continent: 'asia',
     flag: 'https://flagcdn.com/qa.svg'
-  },
-  {
-    code: 'CG',
-    names: 'Congo-Brazzaville',
-    capitals: '',
-    continent: 'africa',
-    flag: 'https://flagcdn.com/cg.svg'
-  },
-  {
-    code: 'KR',
-    names: 'Corée du Sud',
-    capitals: 'Séoul',
-    continent: 'asia',
-    flag: 'https://flagcdn.com/kr.svg'
   },
   {
     code: 'RE',
