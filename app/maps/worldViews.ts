@@ -39,7 +39,7 @@ export const continentViews:
     },
 
     northAmerica: {
-      x: 310,
+      x: 283,
       y: 130,
       zoom: 2.5
     },
