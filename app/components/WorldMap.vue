@@ -69,9 +69,7 @@ function applyCountryStyles() {
     }
 
     const paths =
-      mapRef.value.querySelectorAll(
-        'path'
-      )
+      mapRef.value.querySelectorAll('path, circle, ellipse')
 
     paths.forEach(path => {
       path.classList.remove(
@@ -156,12 +154,13 @@ function handleMapClick(
     return
   }
 
-  const target =
-    event.target as SVGPathElement
+  const target = event.target as SVGPathElement
 
   if (
     !target ||
-    target.tagName !== 'path'
+    !['path', 'circle', 'ellipse'].includes(
+      target.tagName
+    )
   ) {
     return
   }
@@ -203,7 +202,9 @@ function handleMouseOver(
 
   if (
     !target ||
-    target.tagName !== 'path'
+    !['path', 'circle', 'ellipse'].includes(
+      target.tagName
+    )
   ) {
     return
   }
@@ -212,7 +213,7 @@ function handleMouseOver(
 
   mapRef.value
     ?.querySelectorAll(
-      `path[id="${code}"]`
+      `[id="${code}"]`
     )
     .forEach(path =>
       path.classList.add(
@@ -229,7 +230,9 @@ function handleMouseOut(
 
   if (
     !target ||
-    target.tagName !== 'path'
+    !['path', 'circle', 'ellipse'].includes(
+      target.tagName
+    )
   ) {
     return
   }
@@ -238,7 +241,7 @@ function handleMouseOut(
 
   mapRef.value
     ?.querySelectorAll(
-      `path[id="${code}"]`
+      `[id="${code}"]`
     )
     .forEach(path =>
       path.classList.remove(
@@ -416,7 +419,8 @@ watch(
     non-scaling-stroke;
 }
 
-.world-map path {
+.world-map path,
+.world-map circle {
   fill: #505058;
 
   stroke: #18181b;
@@ -426,32 +430,83 @@ watch(
     opacity 0.15s;
 }
 
-.world-map path.hovered {
+.world-map ellipse {
+  fill: transparent;
+
+  stroke: #505058;
+  stroke-width: 1.5;
+
+  transition:
+    fill 0.15s,
+    stroke 0.15s;
+}
+
+.world-map path.hovered,
+.world-map circle.hovered {
   fill: #6c6c75;
 }
 
-.world-map path:hover {
+.world-map ellipse.hovered {
+  fill: #505057;
+  stroke: #6c6c75;
+}
+
+.world-map path:hover,
+.world-map circle:hover,
+.world-map ellipse:hover {
   cursor: pointer;
 }
 
-.world-map path.correct {
+.world-map path.correct,
+.world-map circle.correct {
   fill: #22c55e;
 }
 
-.world-map path.wrong {
+.world-map path.wrong,
+.world-map circle.wrong {
   fill: #ef4444;
 }
 
-.world-map path.revealed {
+.world-map path.revealed,
+.world-map circle.revealed {
   fill: #c2c2ca;
 }
 
-.world-map path.highlighted {
+.world-map path.highlighted,
+.world-map circle.highlighted {
   fill: #eab308;
 }
 
-.world-map path.disabled {
+.world-map path.disabled,
+.world-map circle.disabled {
   fill: #424242;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.world-map ellipse.correct {
+  fill: #22c55e55;
+  stroke: #22c55e;
+}
+
+.world-map ellipse.wrong {
+  fill: #ef444455;
+  stroke: #ef4444;
+}
+
+.world-map ellipse.revealed {
+  fill: #c2c2ca55;
+  stroke: #c2c2ca;
+}
+
+.world-map ellipse.highlighted {
+  fill: #eab30855;
+  stroke: #eab308;
+}
+
+.world-map ellipse.disabled {
+  fill: #292929;
+  stroke: #424242;
   opacity: 0.35;
   pointer-events: none;
 }
