@@ -53,41 +53,25 @@ export function useGame(
 
   const answer = ref('')
 
-  const flagChoices = ref<
-    Country[]
-  >([])
+  const flagChoices = ref<Country[]>([])
 
-  const usedCountries = ref<
-    string[]
-  >([])
+  const usedCountries = ref<string[]>([])
 
-  const correctCountries = ref<
-    string[]
-  >([])
+  const correctCountries = ref<string[]>([])
 
-  const revealedCountries = ref<
-    string[]
-  >([])
+  const revealedCountries = ref<string[]>([])
 
-  const wrongCountry = ref<
-    string | null
-  >(null)
+  const revealedCountry = ref<string | null>(null)
 
-  const matchedCountryName =
-    ref<string | null>(null)
+  const wrongCountry = ref<string | null>(null)
 
-  const matchedCapital =
-    ref<string | null>(null)
+  const matchedCountryName = ref<string | null>(null)
 
-  const gameFinished =
-    ref(false)
+  const matchedCapital = ref<string | null>(null)
 
-  const tasks = reactive<
-    Record<
-      GameElement,
-      TaskState
-    >
-  >({
+  const gameFinished = ref(false)
+
+  const tasks = reactive<Record<GameElement,TaskState>>({
     flag: 'pending',
     country: 'pending',
     capital: 'pending',
@@ -398,15 +382,7 @@ export function useGame(
 
       wrongCountry.value = code
 
-      if (
-        !revealedCountries.value.includes(
-          currentCountry.value.code
-        )
-      ) {
-        revealedCountries.value.push(
-          currentCountry.value.code
-        )
-      }
+      revealedCountry.value = currentCountry.value.code
     }
 
     checkRoundCompletion()
@@ -432,10 +408,20 @@ export function useGame(
   }
 
   function nextQuestion() {
-    const remainingCountries =
-      getRemainingCountries()
+    const remainingCountries = getRemainingCountries()
 
-    revealedCountries.value = []
+    if (
+      revealedCountry.value &&
+      !revealedCountries.value.includes(
+        revealedCountry.value
+      )
+    ) {
+      revealedCountries.value.push(
+        revealedCountry.value
+      )
+    }
+
+    revealedCountry.value = null
     wrongCountry.value = null
     revealedFlag.value = null
     matchedCountryName.value = null
@@ -476,6 +462,7 @@ export function useGame(
     score.value = 0
     usedCountries.value = []
     correctCountries.value = []
+    revealedCountry.value = null
     revealedCountries.value = []
     wrongCountry.value = null
     revealedFlag.value = null
@@ -538,6 +525,7 @@ export function useGame(
     answer,
     usedCountries,
     correctCountries,
+    revealedCountry,
     revealedCountries,
     wrongCountry,
     gameFinished,

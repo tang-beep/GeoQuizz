@@ -92,6 +92,7 @@ const {
   restartGame,
   countries,
   correctCountries,
+  revealedCountry,
   revealedCountries,
   wrongCountry,
   selectCountry,
@@ -152,6 +153,9 @@ function goBackToMenu() {
           "
           :correct-countries="
             correctCountries
+          "
+          :revealed-country="
+            revealedCountry
           "
           :revealed-countries="
             revealedCountries

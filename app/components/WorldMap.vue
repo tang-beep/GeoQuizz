@@ -16,6 +16,7 @@ import { continentViews, type Continent } from '~/maps/worldViews';
 const props = defineProps<{
   currentCountryCode: string
   correctCountries: string[]
+  revealedCountry: string | null
   revealedCountries: string[]
   usedCountries: string[]
   wrongCountry: string | null
@@ -55,24 +56,17 @@ function updateViewport() {
     return
   }
 
-  viewportWidth.value =
-    containerRef.value.clientWidth
-
-  viewportHeight.value =
-    containerRef.value.clientHeight
+  viewportWidth.value = containerRef.value.clientWidth
+  viewportHeight.value = containerRef.value.clientHeight
 }
 
 function applyCountryStyles() {
-  nextTick(() => {
-    if (!mapRef.value) {
-      return
-    }
+  nextTick(() => {if (!mapRef.value) {return}
 
-    const paths =
-      mapRef.value.querySelectorAll('path, circle, ellipse')
+    const elements = mapRef.value.querySelectorAll('path, circle, ellipse')
 
-    paths.forEach(path => {
-      path.classList.remove(
+    elements.forEach(element => {
+      element.classList.remove(
         'correct',
         'wrong',
         'revealed',
@@ -80,88 +74,55 @@ function applyCountryStyles() {
         'disabled'
       )
 
-      const code = path.id
+      const code = element.id
 
       const isInSelectedContinent =
         !props.continent ||
-        countryContinentMap.get(code) ===
-          props.continent
+        countryContinentMap.get(code) === props.continent
 
       if (!isInSelectedContinent) {
-        path.classList.add('disabled')
+        element.classList.add('disabled')
         return
       }
 
-      if (
-        props.startElement ===
-          'map' &&
-        props.highlightCountry ===
-          code
-      ) {
-        path.classList.add(
-          'highlighted'
-        )
+      if (props.wrongCountry === code) {
+        element.classList.add('wrong')
+        return
       }
 
-      if (
-        props.correctCountries.includes(
-          code
-        )
-      ) {
-        path.classList.add(
-          'correct'
-        )
+      if (props.revealedCountry === code) {
+        element.classList.add('highlighted')
+        return
       }
 
-      if (
-        props.revealedCountries.includes(
-          code
-        )
-      ) {
-        path.classList.add(
-          'revealed'
-        )
+      if (props.correctCountries.includes(code)) {
+        element.classList.add('correct')
+        return
       }
 
-      if (
-        props.wrongCountry === code
-      ) {
-        path.classList.add(
-          'wrong'
-        )
+      if (props.revealedCountries.includes(code) ||
+        (props.usedCountries.includes(code) &&
+          !props.correctCountries.includes(code))) {
+        element.classList.add('revealed')
+        return
       }
 
-      if (
-        props.usedCountries.includes(
-          code
-        ) &&
-        !props.correctCountries.includes(
-          code
-        )
-      ) {
-        path.classList.add(
-          'revealed'
-        )
+      if (props.startElement === 'map' &&
+        props.highlightCountry === code) {
+        element.classList.add('highlighted')
       }
     })
   })
 }
 
-function handleMapClick(
-  event: MouseEvent
-) {
+function handleMapClick(event: MouseEvent) {
   if (hasDragged.value) {
     return
   }
 
   const target = event.target as SVGPathElement
 
-  if (
-    !target ||
-    !['path', 'circle', 'ellipse'].includes(
-      target.tagName
-    )
-  ) {
+  if (!target || !['path', 'circle', 'ellipse'].includes(target.tagName)) {
     return
   }
 
@@ -171,83 +132,48 @@ function handleMapClick(
     return
   }
 
-  if (
-    props.continent &&
-    countryContinentMap.get(code) !==
-      props.continent
-  ) {
+  if (props.continent && countryContinentMap.get(code) !== props.continent) {
     return
   }
 
   emit('selectCountry', code)
 }
 
-function handleWheel(
-  event: WheelEvent
-) {
+function handleWheel(event: WheelEvent) {
   event.preventDefault()
 
   if (event.deltaY < 0) {
     camera.zoomIn(1.2)
-  } else {
+  } 
+  else {
     camera.zoomOut(1.2)
   }
 }
 
-function handleMouseOver(
-  event: MouseEvent
-) {
-  const target =
-    event.target as SVGPathElement
+function handleMouseOver(event: MouseEvent) {
+  const target = event.target as SVGPathElement
 
-  if (
-    !target ||
-    !['path', 'circle', 'ellipse'].includes(
-      target.tagName
-    )
-  ) {
+  if (!target || !['path', 'circle', 'ellipse'].includes(target.tagName)) {
     return
   }
 
   const code = target.id
 
-  mapRef.value
-    ?.querySelectorAll(
-      `[id="${code}"]`
-    )
-    .forEach(path =>
-      path.classList.add(
-        'hovered'
-      )
-    )
+  mapRef.value?.querySelectorAll(`[id="${code}"]`)
+    .forEach(path => path.classList.add('hovered'))
 }
 
-function handleMouseOut(
-  event: MouseEvent
-) {
-  const target =
-    event.target as SVGPathElement
+function handleMouseOut(event: MouseEvent) {
+  const target = event.target as SVGPathElement
 
-  if (
-    !target ||
-    !['path', 'circle', 'ellipse'].includes(
-      target.tagName
-    )
-  ) {
+  if (!target || !['path', 'circle', 'ellipse'].includes(target.tagName)) {
     return
   }
 
   const code = target.id
 
-  mapRef.value
-    ?.querySelectorAll(
-      `[id="${code}"]`
-    )
-    .forEach(path =>
-      path.classList.remove(
-        'hovered'
-      )
-    )
+  mapRef.value?.querySelectorAll(`[id="${code}"]`)
+    .forEach(path => path.classList.remove('hovered'))
 }
 
 function startDrag() {
@@ -337,6 +263,7 @@ watch(
 watch(
   () => [
     props.correctCountries,
+    props.revealedCountry,
     props.revealedCountries,
     props.usedCountries,
     props.wrongCountry,
