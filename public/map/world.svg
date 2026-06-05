@@ -991,7 +991,7 @@ THE SOFTWARE.
     <circle id="BH-marker" class="hint-marker" cx="1264.1" cy="333.3" r="15" />
     <circle id="BB-marker" class="hint-marker" cx="651.5" cy="418" r="15" />
     <circle id="CV-marker" class="hint-marker" cx="853.3" cy="397.8" r="15" />
-    <circle id="CY-marker" class="hint-marker" cx="1166.5" cy="277.2" r="15" />
+    <circle id="CY-marker" class="hint-marker" cx="1164" cy="277.2" r="15" />
     <circle id="KM-marker" class="hint-marker" cx="1233.2" cy="579" r="15" />
     <circle id="CK-marker" class="hint-marker" cx="2065" cy="630" r="15" />
     <circle id="DM-marker" class="hint-marker" cx="642" cy="401.7" r="15" />
