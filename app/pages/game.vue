@@ -1,10 +1,25 @@
 <script setup lang="ts">
+import { worldMap } from '~/maps/world'
 import type {
   GameElement,
   GameSettings
 } from '../types/game'
+import { continents, type Continent } from '~/maps/worldViews'
 
 const route = useRoute()
+
+function isContinent(
+  value: string
+): value is Continent {
+  return continents.includes(
+    value as Continent
+  )
+}
+
+const continentQuery =
+  route.query.continent
+    ?.toString()
+    .trim()
 
 const settings: GameSettings = {
   numberOfCountries: Number(
@@ -12,9 +27,10 @@ const settings: GameSettings = {
   ),
 
   continent:
-    route.query.continent
-      ?.toString()
-      .trim() || null,
+    continentQuery &&
+      isContinent(continentQuery)
+        ? continentQuery
+        : null, 
 
   startElement:
     (
@@ -76,11 +92,13 @@ const {
   restartGame,
   countries,
   correctCountries,
+  revealedCountry,
   revealedCountries,
   wrongCountry,
   selectCountry,
+  matchedCountryName,
+  matchedCapital, 
   tasks,
-  roundFinished,
 
   startElement,
   targetElements,
@@ -88,7 +106,9 @@ const {
   flagChoices,
   revealedFlag,
   selectFlag,
-  maxScore
+  maxScore, 
+
+  continent
 } = useGame(settings)
 
 function goBackToMenu() {
@@ -134,12 +154,19 @@ function goBackToMenu() {
           :correct-countries="
             correctCountries
           "
+          :revealed-country="
+            revealedCountry
+          "
           :revealed-countries="
             revealedCountries
           "
           :wrong-country="
             wrongCountry
           "
+          :map-config="
+            worldMap
+          "
+          :continent="continent"
           @select-country="
             selectCountry
           "
@@ -252,7 +279,8 @@ function goBackToMenu() {
                 tasks.country ===
                 'pending'
                   ? 'Pays'
-                  : currentCountry.name
+                  : matchedCountryName ??
+                    currentCountry.names[0]
               }}
             </div>
 
@@ -281,7 +309,8 @@ function goBackToMenu() {
                 tasks.capital ===
                 'pending'
                   ? 'Capitale'
-                  : currentCountry.capital
+                  : matchedCapital ??
+                    currentCountry.capitals[0]
               }}
             </div>
 

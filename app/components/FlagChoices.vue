@@ -50,7 +50,6 @@ const emit =
     >
       <img
         :src="`https://flagcdn.com/${country.code.toLowerCase()}.svg`"
-        :alt="country.name"
         :class="
           countries.length === 1
             ? 'h-32 w-full object-contain'

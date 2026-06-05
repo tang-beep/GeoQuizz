@@ -12,6 +12,7 @@ import type {
   GameElement,
   GameSettings
 } from '../types/game'
+import { distance } from 'fastest-levenshtein'
 
 type TaskState =
   | 'pending'
@@ -39,63 +40,52 @@ export function useGame(
   }
 
   const filteredCountries =
-    allCountries.filter(country => {
-      if (
-        settings.continent &&
-        country.continent !==
+    allCountries.filter(
+      country =>
+        !settings.continent ||
+        country.continent ===
           settings.continent
-      ) {
-        return false
-      }
+    )
 
-      return true
-    })
-
-  const countries = shuffle(
-    filteredCountries
-  ).slice(
-    0,
-    settings.numberOfCountries
-  )
+  const countries = ref<Country[]>([])
 
   const score = ref(0)
 
   const answer = ref('')
 
-  const flagChoices = ref<
-    Country[]
-  >([])
+  const flagChoices = ref<Country[]>([])
 
-  const usedCountries = ref<
-    string[]
-  >([])
+  const usedCountries = ref<string[]>([])
 
-  const correctCountries = ref<
-    string[]
-  >([])
+  const correctCountries = ref<string[]>([])
 
-  const revealedCountries = ref<
-    string[]
-  >([])
+  const revealedCountries = ref<string[]>([])
 
-  const wrongCountry = ref<
-    string | null
-  >(null)
+  const revealedCountry = ref<string | null>(null)
 
-  const gameFinished =
-    ref(false)
+  const wrongCountry = ref<string | null>(null)
 
-  const tasks = reactive<
-    Record<
-      GameElement,
-      TaskState
-    >
-  >({
+  const matchedCountryName = ref<string | null>(null)
+
+  const matchedCapital = ref<string | null>(null)
+
+  const gameFinished = ref(false)
+
+  const tasks = reactive<Record<GameElement,TaskState>>({
     flag: 'pending',
     country: 'pending',
     capital: 'pending',
     map: 'pending'
   })
+
+  function generateCountries() {
+    countries.value = shuffle(
+      filteredCountries
+    ).slice(
+      0,
+      settings.numberOfCountries
+    )
+  }
 
   function resetTasks() {
     Object.keys(tasks).forEach(
@@ -122,12 +112,15 @@ export function useGame(
         /[\u0300-\u036f]/g,
         ''
       )
-      .trim()
+      .replace(
+        /[-'’\s]/g,
+        ''
+      )
       .toLowerCase()
   }
 
   function getRemainingCountries() {
-    return countries.filter(
+    return countries.value.filter(
       country =>
         !usedCountries.value.includes(
           country.code
@@ -155,7 +148,7 @@ export function useGame(
     }
 
     const wrongCountries =
-      countries
+      countries.value
         .filter(
           country =>
             country.code !==
@@ -178,6 +171,7 @@ export function useGame(
     ref<Country | null>(null)
 
   onMounted(() => {
+    generateCountries()
     currentCountry.value =
       pickRandomCountry()
     if (
@@ -217,6 +211,48 @@ export function useGame(
       return 'Entrée → question suivante'
     })
 
+    function findBestMatch(
+      input: string,
+      values: string[]
+    ) {
+      const normalizedInput =
+        normalizeString(input)
+
+      let bestMatch: string | null =
+        null
+
+      let bestDistance =
+        Infinity
+
+      for (const value of values) {
+        const d = distance(
+          normalizedInput,
+          normalizeString(value)
+        )
+
+        if (d < bestDistance) {
+          bestDistance = d
+          bestMatch = value
+        }
+      }
+
+      if (!bestMatch) {
+        return null
+      }
+
+      const maxDistance =
+        bestMatch.length <= 6
+          ? 1
+          : bestMatch.length <= 12
+            ? 2
+            : 3
+
+      return bestDistance <=
+        maxDistance
+        ? bestMatch
+        : null
+    }
+
   function validateCountry() {
     if (
       !currentCountry.value ||
@@ -226,13 +262,16 @@ export function useGame(
       return
     }
 
-    const success =
-      normalizeString(
-        answer.value
-      ) ===
-      normalizeString(
-        currentCountry.value.name
+    const matched =
+      findBestMatch(
+        answer.value,
+        currentCountry.value.names
       )
+
+    const success = !!matched
+
+    matchedCountryName.value =
+      matched
 
     tasks.country = success
       ? 'success'
@@ -256,13 +295,16 @@ export function useGame(
       return
     }
 
-    const success =
-      normalizeString(
-        answer.value
-      ) ===
-      normalizeString(
-        currentCountry.value.capital
+    const matched =
+      findBestMatch(
+        answer.value,
+        currentCountry.value.capitals
       )
+
+    const success = !!matched
+
+    matchedCapital.value =
+      matched
 
     tasks.capital = success
       ? 'success'
@@ -340,15 +382,7 @@ export function useGame(
 
       wrongCountry.value = code
 
-      if (
-        !revealedCountries.value.includes(
-          currentCountry.value.code
-        )
-      ) {
-        revealedCountries.value.push(
-          currentCountry.value.code
-        )
-      }
+      revealedCountry.value = currentCountry.value.code
     }
 
     checkRoundCompletion()
@@ -374,16 +408,24 @@ export function useGame(
   }
 
   function nextQuestion() {
-    const remainingCountries =
-      getRemainingCountries()
+    const remainingCountries = getRemainingCountries()
 
-    correctCountries.value = []
+    if (
+      revealedCountry.value &&
+      !revealedCountries.value.includes(
+        revealedCountry.value
+      )
+    ) {
+      revealedCountries.value.push(
+        revealedCountry.value
+      )
+    }
 
-    revealedCountries.value = []
-
+    revealedCountry.value = null
     wrongCountry.value = null
-
     revealedFlag.value = null
+    matchedCountryName.value = null
+    matchedCapital.value = null
 
     if (
       remainingCountries.length ===
@@ -415,21 +457,19 @@ export function useGame(
   }
 
   function restartGame() {
+    generateCountries()
+
     score.value = 0
-
     usedCountries.value = []
-
     correctCountries.value = []
-
+    revealedCountry.value = null
     revealedCountries.value = []
-
     wrongCountry.value = null
-
     revealedFlag.value = null
-
     gameFinished.value = false
-
     answer.value = ''
+    matchedCountryName.value = null
+    matchedCapital.value = null
 
     resetTasks()
 
@@ -474,7 +514,7 @@ export function useGame(
 
   const maxScore = computed(
     () =>
-      countries.length *
+      countries.value.length *
       targetElements.length
   )
 
@@ -485,6 +525,7 @@ export function useGame(
     answer,
     usedCountries,
     correctCountries,
+    revealedCountry,
     revealedCountries,
     wrongCountry,
     gameFinished,
@@ -496,6 +537,8 @@ export function useGame(
     restartGame,
     selectCountry,
     countries,
+    matchedCountryName,
+    matchedCapital,
 
     startElement,
     targetElements, 
@@ -503,6 +546,8 @@ export function useGame(
     flagChoices,
     selectFlag,
     revealedFlag, 
-    maxScore
+    maxScore, 
+
+    continent: settings.continent
   }
 }

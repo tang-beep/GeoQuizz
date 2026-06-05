@@ -24,7 +24,7 @@ defineProps<{
     <p
       class="text-3xl font-bold"
     >
-      {{ country.name }}
+      {{ country.names[0] }}
     </p>
   </div>
 
@@ -37,7 +37,7 @@ defineProps<{
     <p
       class="text-3xl font-bold"
     >
-      {{ country.capital }}
+      {{ country.capitals[0] }}
     </p>
   </div>
 
