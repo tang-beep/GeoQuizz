@@ -52,7 +52,7 @@ export const continentViews:
 
     oceania: {
       x: 995,
-      y: 370,
+      y: 350,
       zoom: 3
     }
   }

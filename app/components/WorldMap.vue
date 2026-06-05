@@ -63,7 +63,16 @@ function updateViewport() {
 function applyCountryStyles() {
   nextTick(() => {if (!mapRef.value) {return}
 
-    const elements = mapRef.value.querySelectorAll('path, circle, ellipse')
+    const elements =
+      mapRef.value.querySelectorAll(
+        'path[id], circle[id]:not(.hint-marker), ellipse[id]:not(.hint-marker)'
+      )
+
+    mapRef.value
+      .querySelectorAll('.hint-marker')
+      .forEach(marker =>
+        marker.classList.remove('active')
+      )
 
     elements.forEach(element => {
       element.classList.remove(
@@ -80,6 +89,8 @@ function applyCountryStyles() {
         !props.continent ||
         countryContinentMap.get(code) === props.continent
 
+      const marker = document.getElementById(`${code}-marker`)
+
       if (!isInSelectedContinent) {
         element.classList.add('disabled')
         return
@@ -92,6 +103,7 @@ function applyCountryStyles() {
 
       if (props.revealedCountry === code) {
         element.classList.add('highlighted')
+        marker?.classList.add('active')
         return
       }
 
@@ -110,6 +122,7 @@ function applyCountryStyles() {
       if (props.startElement === 'map' &&
         props.highlightCountry === code) {
         element.classList.add('highlighted')
+        marker?.classList.add('active')
       }
     })
   })
@@ -436,5 +449,22 @@ watch(
   stroke: #424242;
   opacity: 0.35;
   pointer-events: none;
+}
+
+.world-map circle.hint-marker,
+.world-map ellipse.hint-marker {
+  opacity: 0;
+  pointer-events: none;
+
+  fill: transparent;
+  stroke: #ef4444;
+  stroke-width: 1;
+
+  transition: opacity 0.2s;
+}
+
+.world-map circle.hint-marker.active,
+.world-map ellipse.hint-marker.active {
+  opacity: 1;
 }
 </style>
