@@ -21,9 +21,9 @@ export type Continent =
 export const continentViews: 
   Record<Continent, MapView> = {
     europe: {
-      x: 550,
+      x: 520,
       y: 100,
-      zoom: 3
+      zoom: 3.5
     },
 
     africa: {
@@ -33,26 +33,26 @@ export const continentViews:
     },
 
     asia: {
-      x: 790,
+      x: 785,
       y: 165,
       zoom: 2.2
     },
 
     northAmerica: {
-      x: 283,
+      x: 270,
       y: 130,
       zoom: 2.5
     },
 
     southAmerica: {
-      x: 350,
+      x: 330,
       y: 365,
       zoom: 2.6
     },
 
     oceania: {
-      x: 1050,
-      y: 380,
+      x: 995,
+      y: 370,
       zoom: 3
     }
   }

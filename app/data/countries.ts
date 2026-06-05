@@ -58,6 +58,19 @@ export const countries: Country[] = [
     flag: 'https://flagcdn.com/de.svg'
   },
   {
+    code: 'AD',
+    names: [
+      'Andorre', 
+      'Andorra'
+    ],
+    capitals: [
+      'Andorre-la-Vieille',
+      'Andorra la Vella'
+    ],
+    continent: 'europe',
+    flag: 'https://flagcdn.com/ad.svg'
+  },
+  {
     code: 'AO',
     names: [
       'Angola'
@@ -476,6 +489,17 @@ export const countries: Country[] = [
     capitals: ['Kinshasa'],
     continent: 'africa',
     flag: 'https://flagcdn.com/cd.svg'
+  },
+  {
+    code: 'CK',
+    names: [
+      'Îles Cook',
+      "Kūki 'Āirani",
+      'Cook Islands'
+    ],
+    capitals: ['Avarua'],
+    continent: 'oceania',
+    flag: 'https://flagcdn.com/ck.svg'
   },
   {
     code: 'KP',
@@ -1036,6 +1060,18 @@ export const countries: Country[] = [
     flag: 'https://flagcdn.com/kg.svg'
   },
   {
+    code: 'KI',
+    names: [
+      'Kiribati'
+    ],
+    capitals: [
+      'Tarawa-Sud',
+      'Tarawa'
+    ],
+    continent: 'oceania',
+    flag: 'https://flagcdn.com/ki.svg'
+  },
+  {
     code: 'XK',
     names: [
       'Kosovo',
@@ -1118,6 +1154,13 @@ export const countries: Country[] = [
     capitals: ['Tripoli'],
     continent: 'africa',
     flag: 'https://flagcdn.com/ly.svg'
+  },
+  {
+    code: 'LI',
+    names: ['Liechtenstein'],
+    capitals: ['Vaduz'],
+    continent: 'europe',
+    flag: 'https://flagcdn.com/li.svg'
   },
   {
     code: 'LT',
@@ -1289,6 +1332,19 @@ export const countries: Country[] = [
     flag: 'https://flagcdn.com/md.svg'
   },
   {
+    code: 'MC',
+    names: [
+      'Monaco',
+      'Mu̍negu'
+    ],
+    capitals: [
+      'Monaco',
+      'Mu̍negu'
+    ],
+    continent: 'europe',
+    flag: 'https://flagcdn.com/mc.svg'
+  },
+  {
     code: 'MN',
     names: [
       'Mongolie',
@@ -1381,6 +1437,18 @@ export const countries: Country[] = [
     capitals: ['Abuja'],
     continent: 'africa',
     flag: 'https://flagcdn.com/ng.svg'
+  },
+  {
+    code: 'NU',
+    names: [
+      'Niue',
+      'Nioué',
+      'Niué',
+      'Niuē'
+    ],
+    capitals: ['Alofi'],
+    continent: 'oceania',
+    flag: 'https://flagcdn.com/nu.svg'
   },
   {
     code: 'NO',
@@ -1669,6 +1737,20 @@ export const countries: Country[] = [
     flag: 'https://flagcdn.com/lc.svg'
   },
   {
+    code: 'SM',
+    names: [
+      'Saint-Marin',
+      'San Marino'
+    ],
+    capitals: [
+      'Saint-Marin',
+      'San Marino',
+      'City of San Marino'
+    ],
+    continent: 'europe',
+    flag: 'https://flagcdn.com/sm.svg'
+  },
+  {
     code: 'VC',
     names: [
       'Saint-Vincent-et-les Grenadines',
@@ -1760,6 +1842,21 @@ export const countries: Country[] = [
     capitals: ['Freetown'],
     continent: 'africa',
     flag: 'https://flagcdn.com/sl.svg'
+  },
+  {
+    code: 'SG',
+    names: [
+      'Singapour',
+      'Singapura',
+      'Singapore'
+    ],
+    capitals: [
+      'Singapour',
+      'Singapura',
+      'Singapore'
+    ],
+    continent: 'asia',
+    flag: 'https://flagcdn.com/sg.svg'
   },
   {
     code: 'SK',
@@ -2053,10 +2150,29 @@ export const countries: Country[] = [
     names: ['Vanuatu'],
     capitals: [
       'Port-Vila',
-      '	Port Vila'
+      'Port Vila'
     ],
     continent: 'oceania',
     flag: 'https://flagcdn.com/vu.svg'
+  },
+  {
+    code: 'VA',
+    names: [
+      'Vatican',
+      'Vaticano',
+      'Vaticanae',
+      'Cité du Vatican',
+      'Vatican City'
+    ],
+    capitals: [
+      'Vatican',
+      'Vaticano',
+      'Vaticanae',
+      'Cité du Vatican',
+      'Vatican City'
+    ],
+    continent: 'europe',
+    flag: 'https://flagcdn.com/va.svg'
   },
   {
     code: 'VE',
