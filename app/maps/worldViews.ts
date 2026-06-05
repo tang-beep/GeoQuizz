@@ -1,7 +1,7 @@
 import type { MapView } from "./mapConfig";
 
 export const worldView: MapView = {
-  x: 600,
+  x: 620,
   y: 250,
   zoom: 1.1
 }
