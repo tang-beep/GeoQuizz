@@ -108,7 +108,9 @@ const {
   selectFlag,
   maxScore, 
 
-  continent
+  continent,
+
+  elapsedTime
 } = useGame(settings)
 
 function goBackToMenu() {
@@ -190,6 +192,11 @@ function goBackToMenu() {
 
           | Score :
           {{ score }}
+        </p>
+
+        <p class="text-zinc-400">
+          Temps :
+          {{ elapsedTime }}s
         </p>
 
         <button
