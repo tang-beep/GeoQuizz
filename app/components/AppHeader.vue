@@ -3,8 +3,14 @@ const supabase =
   useSupabase()
 
 const user = useAuth()
-const currentUser = computed(() => user.value)
-const ready = ref(false)
+
+const currentUser =
+  computed(
+    () => user.value
+  )
+
+const ready =
+  ref(false)
 
 onMounted(() => {
   ready.value = true
@@ -23,9 +29,10 @@ async function logout() {
   >
     <div
       v-if="ready"
+      class="mx-auto flex h-16 max-w-7xl items-center justify-between px-6"
     >
       <div
-        class="mx-auto flex h-16 max-w-7xl items-center justify-between px-6"
+        class="flex items-center gap-8"
       >
         <NuxtLink
           to="/"
@@ -34,44 +41,63 @@ async function logout() {
           GeoQuiz
         </NuxtLink>
 
-        <div
-          v-if="currentUser"
+        <nav
           class="flex items-center gap-4"
         >
-          <span
-            class="text-zinc-300"
+          <NuxtLink
+            to="/leaderboard"
+            class="text-zinc-300 hover:text-white"
           >
-            {{
-              currentUser.user_metadata
-                ?.username ??
-              currentUser.email
-            }}
-          </span>
+            Leaderboard
+          </NuxtLink>
 
-          <button
-            class="rounded-lg bg-red-600 px-3 py-2"
-            @click="logout"
+          <NuxtLink
+            v-if="currentUser"
+            to="/account"
+            class="text-zinc-300 hover:text-white"
           >
-            Déconnexion
-          </button>
-        </div>
+            Mon compte
+          </NuxtLink>
+        </nav>
+      </div>
 
-        <div
-          v-else
-          class="flex gap-3"
+      <div
+        v-if="currentUser"
+        class="flex items-center gap-4"
+      >
+        <span
+          class="text-zinc-300"
         >
-          <NuxtLink
-            to="/login"
-          >
-            Connexion
-          </NuxtLink>
+          {{
+            currentUser.user_metadata
+              ?.username ??
+            currentUser.email
+          }}
+        </span>
 
-          <NuxtLink
-            to="/register"
-          >
-            Inscription
-          </NuxtLink>
-        </div>
+        <button
+          class="rounded-lg bg-red-600 px-3 py-2"
+          @click="logout"
+        >
+          Déconnexion
+        </button>
+      </div>
+
+      <div
+        v-else
+        class="flex gap-3"
+      >
+        <NuxtLink
+          to="/login"
+        >
+          Connexion
+        </NuxtLink>
+
+        <NuxtLink
+          to="/register"
+        >
+          Inscription
+        </NuxtLink>
       </div>
     </div>
   </header>
