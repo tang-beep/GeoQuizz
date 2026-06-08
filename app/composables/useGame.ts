@@ -65,6 +65,9 @@ export function useGame(
   const elapsedTime = ref(0)
   const finalRoundTime = ref(0)
   const roundLocked = ref(false)
+  const totalCorrectAnswers = ref(0)
+  const gameStartTime = ref(Date.now())
+  let totalTimeSeconds: number
   let timer: number
 
   const tasks = reactive<Record<GameElement,TaskState>>({
@@ -168,12 +171,9 @@ export function useGame(
 
   onMounted(() => {
     generateCountries()
-
-    currentCountry.value =
-      pickRandomCountry()
-
-    questionStartTime.value =
-      Date.now()
+    currentCountry.value = pickRandomCountry()
+    questionStartTime.value = Date.now()
+    gameStartTime.value = Date.now()
 
     timer = window.setInterval(
       () => {
@@ -300,6 +300,7 @@ export function useGame(
 
     if (success) {
       roundCorrectAnswers.value++
+      totalCorrectAnswers.value++
     }
 
     answer.value = ''
@@ -333,6 +334,7 @@ export function useGame(
 
     if (success) {
       roundCorrectAnswers.value++
+      totalCorrectAnswers.value++
     }
 
     answer.value = ''
@@ -363,6 +365,7 @@ export function useGame(
 
     if (success) {
       roundCorrectAnswers.value++
+      totalCorrectAnswers.value++
     }
 
     checkRoundCompletion()
@@ -384,6 +387,7 @@ export function useGame(
       currentCountry.value.code
     ) {
       roundCorrectAnswers.value++
+      totalCorrectAnswers.value++
 
       tasks.map = 'success'
 
@@ -483,6 +487,47 @@ export function useGame(
     }
   }
 
+  async function saveGameResult() {
+    const supabase =
+      useSupabase()
+
+    const {
+      data: { user }
+    } =
+      await supabase.auth.getUser()
+
+    if (!user) {
+      return
+    }
+
+    const totalAnswers =
+      countries.value.length *
+      targetElements.length
+
+    const { error } = await supabase
+      .from('game_results')
+      .insert({
+        user_id: user.id,
+        score: score.value,
+        duration_seconds: totalTimeSeconds,
+        correct_answers: totalCorrectAnswers.value,
+        total_answers: totalAnswers,
+        countries_count: countries.value.length,
+        continent: settings.continent ?? 'world',
+        start_element: settings.startElement,
+        target_elements: targetElements,
+        accuracy: 
+          Math.round(
+          (totalCorrectAnswers.value / totalAnswers) * 10000) / 100
+      })
+    if (error) {
+      console.error(
+        'Erreur sauvegarde partie',
+        error
+      )
+    }
+  }
+
   function nextQuestion() {
     const remainingCountries = getRemainingCountries()
 
@@ -508,6 +553,8 @@ export function useGame(
       0
     ) {
       gameFinished.value = true
+      totalTimeSeconds = Math.round((Date.now() - gameStartTime.value) / 1000)
+      saveGameResult()
       return
     }
 
@@ -553,12 +600,12 @@ export function useGame(
     matchedCountryName.value = null
     matchedCapital.value = null
     roundCorrectAnswers.value = 0
+    totalCorrectAnswers.value = 0
     elapsedTime.value = 0
     finalRoundTime.value = 0
     roundLocked.value = false
-
-questionStartTime.value =
-  Date.now()
+    gameStartTime.value = Date.now()
+    questionStartTime.value = Date.now()
 
     resetTasks()
 
@@ -601,12 +648,6 @@ questionStartTime.value =
     }
   }
 
-  const maxScore = computed(
-    () =>
-      countries.value.length *
-      targetElements.length
-  )
-
   resetTasks()
 
   return {
@@ -634,8 +675,7 @@ questionStartTime.value =
 
     flagChoices,
     selectFlag,
-    revealedFlag, 
-    maxScore, 
+    revealedFlag,
 
     continent: settings.continent,
 

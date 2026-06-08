@@ -114,6 +114,14 @@ async function loginWithGoogle() {
               : 'Se connecter'
           }}
         </button>
+
+        <button
+          type="button"
+          class="w-full rounded-xl bg-zinc-700 py-3"
+          @click="navigateTo('/')"
+        >
+        Continuer comme invité
+        </button>
       </form>
 
       <div

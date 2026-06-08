@@ -106,7 +106,6 @@ const {
   flagChoices,
   revealedFlag,
   selectFlag,
-  maxScore, 
 
   continent,
 
@@ -340,8 +339,7 @@ function goBackToMenu() {
           <p class="mt-6 text-2xl">
             Score final :
             {{ score }}
-            /
-            {{ maxScore }}
+            points
           </p>
 
           <button
