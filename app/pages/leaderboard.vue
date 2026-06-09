@@ -11,7 +11,7 @@ interface LeaderboardPlayer {
   games_played: number
 }
 
-interface LeaderboardMode {
+interface GameMode {
   mode_id: string
   continent: string | null
   countries_count: number
@@ -23,7 +23,7 @@ const players =
   ref<LeaderboardPlayer[]>([])
 
 const modes =
-  ref<LeaderboardMode[]>([])
+  ref<GameMode[]>([])
 
 const loading =
   ref(true)
@@ -45,10 +45,10 @@ async function loadModes() {
     data,
     error
   } = await supabase
-    .from(
-      'leaderboard_modes_view'
-    )
+    .from('game_modes')
     .select('*')
+    .order('continent')
+    .order('countries_count')
 
   if (error) {
     console.error(error)
@@ -57,8 +57,7 @@ async function loadModes() {
 
   modes.value = data ?? []
 
-  const first =
-    modes.value[0]
+  const first = modes.value[0]
 
   if (!first) {
     return
@@ -198,6 +197,7 @@ async function loadLeaderboard() {
         ascending: false
       }
     )
+    .limit(100)
 
   if (error) {
     console.error(error)
