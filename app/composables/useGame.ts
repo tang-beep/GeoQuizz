@@ -487,6 +487,23 @@ export function useGame(
     }
   }
 
+  function buildModeId() {
+    const continent =
+      settings.continent ?? 'world'
+
+    const targets =
+      [...targetElements]
+        .sort()
+        .join('-')
+
+    return [
+      continent,
+      countries.value.length,
+      startElement,
+      targets
+    ].join('|')
+  }
+
   async function saveGameResult() {
     const supabase =
       useSupabase()
@@ -518,7 +535,8 @@ export function useGame(
         target_elements: targetElements,
         accuracy: 
           Math.round(
-          (totalCorrectAnswers.value / totalAnswers) * 10000) / 100
+          (totalCorrectAnswers.value / totalAnswers) * 10000) / 100,
+        mode_id: buildModeId(),
       })
     if (error) {
       console.error(

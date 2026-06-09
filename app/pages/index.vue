@@ -1,34 +1,12 @@
 <script setup lang="ts">
 import type { Continent } from '~/maps/worldViews'
 import type { GameElement } from '../types/game'
+import {getCountryOptions, getCountryCountLabel } from '~/utils/countriesCount'
 
 const continent =
   ref<Continent | ''>('')
 
-const countryOptions = computed(() => {
-  switch (continent.value) {
-    case 'europe':
-      return [10, 20, 44]
-
-    case 'asia':
-      return [10, 20, 49]
-
-    case 'northAmerica':
-      return [10, 22]
-
-    case 'southAmerica':
-      return [13]
-
-    case 'africa':
-      return [10, 20, 55]
-
-    case 'oceania':
-      return [10, 17]
-
-    default:
-      return [10, 20, 50, 100, 200]
-  }
-})
+const countryOptions = computed(() => getCountryOptions(continent.value))
 
 const numberOfCountries =
   ref(countryOptions.value[1] ?? countryOptions.value[0])
@@ -146,19 +124,6 @@ watch(
     deep: true
   }
 )
-
-function getCountryCountLabel(
-  value: number
-) {
-  const max =
-    countryOptions.value[
-      countryOptions.value.length - 1
-    ]
-
-  return value === max
-    ? 'Tous'
-    : value.toString()
-}
 
 function startGame() {
   if (
