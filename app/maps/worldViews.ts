@@ -27,32 +27,32 @@ export const continentViews:
     },
 
     africa: {
-      x: 600,
-      y: 283,
+      x: 570,
+      y: 291,
       zoom: 2.5
     },
 
     asia: {
-      x: 785,
-      y: 165,
-      zoom: 2.2
+      x: 775,
+      y: 185,
+      zoom: 2.1
     },
 
     northAmerica: {
-      x: 270,
-      y: 130,
+      x: 260,
+      y: 150,
       zoom: 2.5
     },
 
     southAmerica: {
       x: 330,
-      y: 365,
+      y: 370,
       zoom: 2.6
     },
 
     oceania: {
-      x: 995,
-      y: 350,
+      x: 1005,
+      y: 365,
       zoom: 3
     }
   }

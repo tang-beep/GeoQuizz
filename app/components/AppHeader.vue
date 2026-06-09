@@ -53,6 +53,14 @@ async function logout() {
 
           <NuxtLink
             v-if="currentUser"
+            to="/daily-challenge"
+            class="text-zinc-300 hover:text-white"
+          >
+            Défi du jour
+          </NuxtLink>
+
+          <NuxtLink
+            v-if="currentUser"
             to="/account"
             class="text-zinc-300 hover:text-white"
           >

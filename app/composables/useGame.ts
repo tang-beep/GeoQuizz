@@ -521,28 +521,111 @@ export function useGame(
       countries.value.length *
       targetElements.length
 
-    const { error } = await supabase
+    const accuracy =
+      Math.round(
+        (
+          totalCorrectAnswers.value /
+          totalAnswers
+        ) * 10000
+      ) / 100
+
+    const {
+      data: gameResult,
+      error
+    } = await supabase
       .from('game_results')
       .insert({
         user_id: user.id,
         score: score.value,
-        duration_seconds: totalTimeSeconds,
-        correct_answers: totalCorrectAnswers.value,
-        total_answers: totalAnswers,
-        countries_count: countries.value.length,
-        continent: settings.continent ?? 'world',
-        start_element: settings.startElement,
-        target_elements: targetElements,
-        accuracy: 
-          Math.round(
-          (totalCorrectAnswers.value / totalAnswers) * 10000) / 100,
-        mode_id: buildModeId(),
+        duration_seconds:
+          totalTimeSeconds,
+        correct_answers:
+          totalCorrectAnswers.value,
+        total_answers:
+          totalAnswers,
+        countries_count:
+          countries.value.length,
+        continent:
+          settings.continent ??
+          'world',
+        start_element:
+          settings.startElement,
+        target_elements:
+          targetElements,
+        accuracy,
+        mode_id:
+          buildModeId()
       })
+      .select('id')
+      .single()
+
     if (error) {
       console.error(
         'Erreur sauvegarde partie',
         error
       )
+
+      return
+    }
+
+    if (
+      settings.dailyChallenge
+    ) {
+      const today =
+        new Date()
+          .toISOString()
+          .split('T')[0]
+
+      const {
+        data,
+        error:
+          dailyError
+      } = await supabase
+        .from(
+          'daily_challenge_attempts'
+        )
+        .update({
+          game_result_id:
+            gameResult.id,
+
+          score:
+            score.value,
+
+          duration_seconds:
+            totalTimeSeconds,
+
+          completed_at:
+            new Date()
+              .toISOString()
+        })
+        .eq(
+          'challenge_date',
+          today
+        )
+        .eq(
+          'user_id',
+          user.id
+        )
+        .is(
+          'completed_at',
+          null
+        )
+        .select()
+
+      if (
+        data?.length === 0
+      ) {
+        console.warn(
+          'Défi déjà validé'
+        )
+      }
+
+      if (dailyError) {
+        console.error(
+          'Erreur daily challenge',
+          dailyError
+        )
+      }
     }
   }
 
