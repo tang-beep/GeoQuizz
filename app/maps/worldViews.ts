@@ -22,7 +22,7 @@ export const continentViews:
   Record<Continent, MapView> = {
     europe: {
       x: 520,
-      y: 100,
+      y: 108,
       zoom: 3.5
     },
 

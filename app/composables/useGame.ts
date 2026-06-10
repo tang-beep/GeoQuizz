@@ -438,16 +438,16 @@ export function useGame(
     const elapsedSeconds = finalRoundTime.value
     let speedBonus = 20
 
-    if (elapsedSeconds < 5) {
+    if (elapsedSeconds < 3) {
       speedBonus = 100
     }
-    else if (elapsedSeconds < 10) {
+    else if (elapsedSeconds < 7) {
       speedBonus = 80
     }
-    else if (elapsedSeconds < 20) {
+    else if (elapsedSeconds < 15) {
       speedBonus = 60
     }
-    else if (elapsedSeconds < 30) {
+    else if (elapsedSeconds < 25) {
       speedBonus = 40
     }
 
