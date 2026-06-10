@@ -1,6 +1,7 @@
 import {
   computed,
   onMounted,
+  onUnmounted,
   reactive,
   ref
 } from 'vue'
@@ -48,28 +49,26 @@ export function useGame(
     )
 
   const countries = ref<Country[]>([])
-
   const score = ref(0)
-
   const answer = ref('')
-
   const flagChoices = ref<Country[]>([])
-
   const usedCountries = ref<string[]>([])
-
   const correctCountries = ref<string[]>([])
-
   const revealedCountries = ref<string[]>([])
-
   const revealedCountry = ref<string | null>(null)
-
   const wrongCountry = ref<string | null>(null)
-
   const matchedCountryName = ref<string | null>(null)
-
   const matchedCapital = ref<string | null>(null)
-
   const gameFinished = ref(false)
+  const questionStartTime = ref(0)
+  const roundCorrectAnswers = ref(0)
+  const elapsedTime = ref(0)
+  const finalRoundTime = ref(0)
+  const roundLocked = ref(false)
+  const totalCorrectAnswers = ref(0)
+  const gameStartTime = ref(Date.now())
+  let totalTimeSeconds: number
+  let timer: number
 
   const tasks = reactive<Record<GameElement,TaskState>>({
     flag: 'pending',
@@ -172,8 +171,26 @@ export function useGame(
 
   onMounted(() => {
     generateCountries()
-    currentCountry.value =
-      pickRandomCountry()
+    currentCountry.value = pickRandomCountry()
+    questionStartTime.value = Date.now()
+    gameStartTime.value = Date.now()
+
+    timer = window.setInterval(
+      () => {
+        if (roundLocked.value) {
+          return
+        }
+
+        elapsedTime.value =
+          Math.floor(
+            (Date.now() -
+              questionStartTime.value) /
+              1000
+          )
+      },
+      100
+    )
+
     if (
       targetElements.includes(
         'flag'
@@ -181,6 +198,10 @@ export function useGame(
     ) {
       generateFlagChoices()
     }
+  })
+
+  onUnmounted(() => {
+    clearInterval(timer)
   })
 
   const roundFinished =
@@ -211,47 +232,47 @@ export function useGame(
       return 'Entrée → question suivante'
     })
 
-    function findBestMatch(
-      input: string,
-      values: string[]
-    ) {
-      const normalizedInput =
-        normalizeString(input)
+  function findBestMatch(
+    input: string,
+    values: string[]
+  ) {
+    const normalizedInput =
+      normalizeString(input)
 
-      let bestMatch: string | null =
-        null
+    let bestMatch: string | null =
+      null
 
-      let bestDistance =
-        Infinity
+    let bestDistance =
+      Infinity
 
-      for (const value of values) {
-        const d = distance(
-          normalizedInput,
-          normalizeString(value)
-        )
+    for (const value of values) {
+      const d = distance(
+        normalizedInput,
+        normalizeString(value)
+      )
 
-        if (d < bestDistance) {
-          bestDistance = d
-          bestMatch = value
-        }
+      if (d < bestDistance) {
+        bestDistance = d
+        bestMatch = value
       }
-
-      if (!bestMatch) {
-        return null
-      }
-
-      const maxDistance =
-        bestMatch.length <= 6
-          ? 1
-          : bestMatch.length <= 12
-            ? 2
-            : 3
-
-      return bestDistance <=
-        maxDistance
-        ? bestMatch
-        : null
     }
+
+    if (!bestMatch) {
+      return null
+    }
+
+    const maxDistance =
+      bestMatch.length <= 6
+        ? 1
+        : bestMatch.length <= 12
+          ? 2
+          : 3
+
+    return bestDistance <=
+      maxDistance
+      ? bestMatch
+      : null
+  }
 
   function validateCountry() {
     if (
@@ -278,7 +299,8 @@ export function useGame(
       : 'error'
 
     if (success) {
-      score.value++
+      roundCorrectAnswers.value++
+      totalCorrectAnswers.value++
     }
 
     answer.value = ''
@@ -311,7 +333,8 @@ export function useGame(
       : 'error'
 
     if (success) {
-      score.value++
+      roundCorrectAnswers.value++
+      totalCorrectAnswers.value++
     }
 
     answer.value = ''
@@ -341,7 +364,8 @@ export function useGame(
       currentCountry.value
 
     if (success) {
-      score.value++
+      roundCorrectAnswers.value++
+      totalCorrectAnswers.value++
     }
 
     checkRoundCompletion()
@@ -362,7 +386,8 @@ export function useGame(
       code ===
       currentCountry.value.code
     ) {
-      score.value++
+      roundCorrectAnswers.value++
+      totalCorrectAnswers.value++
 
       tasks.map = 'success'
 
@@ -388,6 +413,52 @@ export function useGame(
     checkRoundCompletion()
   }
 
+  function getMultiplier(
+    correctAnswers: number
+  ) {
+    switch (correctAnswers) {
+      case 1:
+        return 1
+
+      case 2:
+        return 2
+
+      case 3:
+        return 4
+
+      case 4:
+        return 8
+
+      default:
+        return 0
+    }
+  }
+
+  function computeRoundScore() {
+    const elapsedSeconds = finalRoundTime.value
+    let speedBonus = 20
+
+    if (elapsedSeconds < 3) {
+      speedBonus = 100
+    }
+    else if (elapsedSeconds < 7) {
+      speedBonus = 80
+    }
+    else if (elapsedSeconds < 15) {
+      speedBonus = 60
+    }
+    else if (elapsedSeconds < 25) {
+      speedBonus = 40
+    }
+
+    return Math.round(
+      speedBonus *
+      getMultiplier(
+        roundCorrectAnswers.value
+      )
+    )
+  }
+
   function checkRoundCompletion() {
     if (
       !currentCountry.value ||
@@ -396,14 +467,165 @@ export function useGame(
       return
     }
 
+    finalRoundTime.value =
+      (Date.now() -
+        questionStartTime.value) /
+      1000
+
+    roundLocked.value = true
+
     if (
       !usedCountries.value.includes(
         currentCountry.value.code
       )
     ) {
+      score.value += computeRoundScore()
+
       usedCountries.value.push(
         currentCountry.value.code
       )
+    }
+  }
+
+  function buildModeId() {
+    const continent =
+      settings.continent ?? 'world'
+
+    const targets =
+      [...targetElements]
+        .sort()
+        .join('-')
+
+    return [
+      continent,
+      countries.value.length,
+      startElement,
+      targets
+    ].join('|')
+  }
+
+  async function saveGameResult() {
+    const supabase =
+      useSupabase()
+
+    const {
+      data: { user }
+    } =
+      await supabase.auth.getUser()
+
+    if (!user) {
+      return
+    }
+
+    const totalAnswers =
+      countries.value.length *
+      targetElements.length
+
+    const accuracy =
+      Math.round(
+        (
+          totalCorrectAnswers.value /
+          totalAnswers
+        ) * 10000
+      ) / 100
+
+    const {
+      data: gameResult,
+      error
+    } = await supabase
+      .from('game_results')
+      .insert({
+        user_id: user.id,
+        score: score.value,
+        duration_seconds:
+          totalTimeSeconds,
+        correct_answers:
+          totalCorrectAnswers.value,
+        total_answers:
+          totalAnswers,
+        countries_count:
+          countries.value.length,
+        continent:
+          settings.continent ??
+          'world',
+        start_element:
+          settings.startElement,
+        target_elements:
+          targetElements,
+        accuracy,
+        mode_id:
+          buildModeId()
+      })
+      .select('id')
+      .single()
+
+    if (error) {
+      console.error(
+        'Erreur sauvegarde partie',
+        error
+      )
+
+      return
+    }
+
+    if (
+      settings.dailyChallenge
+    ) {
+      const today =
+        new Date()
+          .toISOString()
+          .split('T')[0]
+
+      const {
+        data,
+        error:
+          dailyError
+      } = await supabase
+        .from(
+          'daily_challenge_attempts'
+        )
+        .update({
+          game_result_id:
+            gameResult.id,
+
+          score:
+            score.value,
+
+          duration_seconds:
+            totalTimeSeconds,
+
+          completed_at:
+            new Date()
+              .toISOString()
+        })
+        .eq(
+          'challenge_date',
+          today
+        )
+        .eq(
+          'user_id',
+          user.id
+        )
+        .is(
+          'completed_at',
+          null
+        )
+        .select()
+
+      if (
+        data?.length === 0
+      ) {
+        console.warn(
+          'Défi déjà validé'
+        )
+      }
+
+      if (dailyError) {
+        console.error(
+          'Erreur daily challenge',
+          dailyError
+        )
+      }
     }
   }
 
@@ -432,8 +654,16 @@ export function useGame(
       0
     ) {
       gameFinished.value = true
+      totalTimeSeconds = Math.round((Date.now() - gameStartTime.value) / 1000)
+      saveGameResult()
       return
     }
+
+    roundCorrectAnswers.value = 0
+    questionStartTime.value = Date.now()
+    elapsedTime.value = 0
+    finalRoundTime.value = 0
+    roundLocked.value = false
 
     currentCountry.value =
       remainingCountries[
@@ -470,6 +700,13 @@ export function useGame(
     answer.value = ''
     matchedCountryName.value = null
     matchedCapital.value = null
+    roundCorrectAnswers.value = 0
+    totalCorrectAnswers.value = 0
+    elapsedTime.value = 0
+    finalRoundTime.value = 0
+    roundLocked.value = false
+    gameStartTime.value = Date.now()
+    questionStartTime.value = Date.now()
 
     resetTasks()
 
@@ -512,12 +749,6 @@ export function useGame(
     }
   }
 
-  const maxScore = computed(
-    () =>
-      countries.value.length *
-      targetElements.length
-  )
-
   resetTasks()
 
   return {
@@ -545,9 +776,10 @@ export function useGame(
 
     flagChoices,
     selectFlag,
-    revealedFlag, 
-    maxScore, 
+    revealedFlag,
 
-    continent: settings.continent
+    continent: settings.continent,
+
+    elapsedTime
   }
 }

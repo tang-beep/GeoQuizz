@@ -1,14 +1,24 @@
 <script setup lang="ts">
 import type { Continent } from '~/maps/worldViews'
-import type {
-  GameElement
-} from '../types/game'
-
-const numberOfCountries =
-  ref(20)
+import type { GameElement } from '../types/game'
+import {getCountryOptions, getCountryCountLabel } from '~/utils/countriesCount'
 
 const continent =
   ref<Continent | ''>('')
+
+const countryOptions = computed(() => getCountryOptions(continent.value))
+
+const numberOfCountries =
+  ref(countryOptions.value[1] ?? countryOptions.value[0])
+
+watch(
+  continent,
+  () => {
+    numberOfCountries.value =
+      countryOptions.value[1] ??
+      countryOptions.value[0]
+  }
+)
 
 const startElement =
   ref<GameElement>('flag')
@@ -155,24 +165,6 @@ function startGame() {
         <label
           class="mb-2 block text-sm text-zinc-400"
         >
-          Nombre de pays
-        </label>
-
-        <input
-          v-model.number="
-            numberOfCountries
-          "
-          type="number"
-          min="1"
-          max="250"
-          class="w-full rounded-xl bg-zinc-800 p-3"
-        >
-      </div>
-
-      <div class="mt-6">
-        <label
-          class="mb-2 block text-sm text-zinc-400"
-        >
           Continent
         </label>
 
@@ -192,15 +184,11 @@ function startGame() {
             Asie
           </option>
 
-          <option
-            value="northAmerica"
-          >
+          <option value="northAmerica">
             Amérique du Nord
           </option>
 
-          <option
-            value="southAmerica"
-          >
+          <option value="southAmerica">
             Amérique du Sud
           </option>
 
@@ -212,6 +200,36 @@ function startGame() {
             Océanie
           </option>
         </select>
+      </div>
+
+      <div class="mt-6">
+        <label
+          class="mb-3 block text-sm text-zinc-400"
+        >
+          Nombre de pays
+        </label>
+
+        <div class="flex flex-wrap gap-2">
+          <button
+            v-for="count in countryOptions"
+            :key="count"
+            class="rounded-xl px-4 py-3 font-semibold transition"
+            :class="
+              numberOfCountries === count
+                ? 'bg-blue-600'
+                : 'bg-zinc-800 hover:bg-zinc-700'
+            "
+            @click="
+              numberOfCountries = count
+            "
+          >
+            {{
+              getCountryCountLabel(
+                count
+              )
+            }}
+          </button>
+        </div>
       </div>
 
       <div class="mt-8">

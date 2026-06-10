@@ -14,4 +14,6 @@ export interface GameSettings {
   startElement: GameElement
 
   targetElements: GameElement[]
+
+  dailyChallenge?: boolean
 }

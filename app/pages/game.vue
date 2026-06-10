@@ -42,7 +42,10 @@ const settings: GameSettings = {
     route.query.targets
       ?.toString()
       .split(',')
-      .filter(Boolean) as GameElement[]
+      .filter(Boolean) as GameElement[],
+
+  dailyChallenge:
+    route.query.daily === '1'
 }
 
 function onKeyDown(
@@ -67,11 +70,65 @@ function onKeyDown(
   handleEnter()
 }
 
+function goToLeaderboard() {
+  if (settings.dailyChallenge) {
+    navigateTo('/daily-leaderboard')
+    return
+  }
+
+  navigateTo('/leaderboard')
+}
+
+const supabase = useSupabase()
+
 onMounted(() => {
   window.addEventListener(
     'keydown',
     onKeyDown
   )
+})
+
+onMounted(async () => {
+  if (!settings.dailyChallenge) {
+    return
+  }
+
+  const {
+    data: { user }
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    navigateTo('/login')
+    return
+  }
+
+  const today =
+    new Date()
+      .toISOString()
+      .split('T')[0]
+
+  const { data } = await supabase
+    .from(
+      'daily_challenge_attempts'
+    )
+    .select(
+      'completed_at'
+    )
+    .eq(
+      'challenge_date',
+      today
+    )
+    .eq(
+      'user_id',
+      user.id
+    )
+    .maybeSingle()
+
+  if (data?.completed_at) {
+    navigateTo(
+      '/daily-challenge'
+    )
+  }
 })
 
 onUnmounted(() => {
@@ -106,9 +163,10 @@ const {
   flagChoices,
   revealedFlag,
   selectFlag,
-  maxScore, 
 
-  continent
+  continent,
+
+  elapsedTime
 } = useGame(settings)
 
 function goBackToMenu() {
@@ -190,6 +248,11 @@ function goBackToMenu() {
 
           | Score :
           {{ score }}
+        </p>
+
+        <p class="text-zinc-400">
+          Temps :
+          {{ elapsedTime }}s
         </p>
 
         <button
@@ -327,22 +390,37 @@ function goBackToMenu() {
           <h2
             class="mt-12 text-4xl font-bold"
           >
-            Partie terminée 🎉
+            Partie terminée !
           </h2>
 
           <p class="mt-6 text-2xl">
             Score final :
             {{ score }}
-            /
-            {{ maxScore }}
+            points
           </p>
 
+          <div class="mt-8 flex flex-col gap-3">
+
           <button
-            class="mt-8 rounded-xl bg-blue-600 px-6 py-3 font-semibold transition hover:bg-blue-500"
+            class="rounded-xl bg-green-600 px-6 py-3 font-semibold transition hover:bg-green-500"
+            @click="goToLeaderboard"
+          >
+            {{
+              settings.dailyChallenge
+                ? 'Voir le classement du défi'
+                : 'Voir le leaderboard'
+            }}
+          </button>
+
+          <button
+            v-if="!settings.dailyChallenge"
+            class="rounded-xl bg-blue-600 px-6 py-3 font-semibold transition hover:bg-blue-500"
             @click="restartGame"
           >
             Rejouer
           </button>
+
+        </div>
 
         </template>
 

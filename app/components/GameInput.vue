@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { onMounted, ref } from 'vue'
+
 defineProps<{
   modelValue: string
   placeholder: string
@@ -7,10 +9,26 @@ defineProps<{
 const emit = defineEmits([
   'update:modelValue'
 ])
+
+const inputRef =
+  ref<HTMLInputElement | null>(
+    null
+  )
+
+function focus() {
+  requestAnimationFrame(() => {
+    inputRef.value?.focus()
+  })
+}
+
+onMounted(() => {
+  focus()
+})
 </script>
 
 <template>
   <input
+    ref="inputRef"
     :value="modelValue"
     type="text"
     :placeholder="placeholder"
@@ -22,5 +40,6 @@ const emit = defineEmits([
           .value
       )
     "
+    @blur="focus"
   >
 </template>

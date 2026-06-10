@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  middleware: ['guest']
+})
+
 const supabase = useSupabase()
 
 const email = ref('')
@@ -113,6 +117,14 @@ async function loginWithGoogle() {
               ? 'Connexion...'
               : 'Se connecter'
           }}
+        </button>
+
+        <button
+          type="button"
+          class="w-full rounded-xl bg-zinc-700 py-3"
+          @click="navigateTo('/')"
+        >
+        Continuer comme invité
         </button>
       </form>
 
