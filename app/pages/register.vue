@@ -8,6 +8,7 @@ const supabase = useSupabase()
 const username = ref('')
 const email = ref('')
 const password = ref('')
+const confirmPassword = ref('')
 
 const loading = ref(false)
 const error = ref('')
@@ -27,6 +28,12 @@ async function register() {
       )
     }
 
+    else if (pseudo.length > 15) {
+      throw new Error(
+        'Le pseudo doit contenir au max 15 caractères'
+      )
+    }
+
     const {
       data: existingUser
     } = await supabase
@@ -38,6 +45,23 @@ async function register() {
     if (existingUser) {
       throw new Error(
         'Ce pseudo est déjà utilisé'
+      )
+    }
+
+    if (
+      password.value !==
+      confirmPassword.value
+    ) {
+      throw new Error(
+        'Les mots de passe ne correspondent pas'
+      )
+    }
+
+    if (
+      password.value.length < 6
+    ) {
+      throw new Error(
+        'Le mot de passe doit contenir au moins 6 caractères'
       )
     }
 
@@ -119,6 +143,13 @@ async function register() {
             class="w-full rounded-xl bg-zinc-800 p-3"
           >
 
+          <input
+            v-model="confirmPassword"
+            type="password"
+            placeholder="Confirmer le mot de passe"
+            class="w-full rounded-xl bg-zinc-800 p-3"
+          />
+
           <p
             v-if="error"
             class="text-sm text-red-400"
@@ -159,7 +190,7 @@ async function register() {
         <div
           class="mt-8 rounded-xl bg-green-600/20 p-4 text-center text-green-400"
         >
-          Compte créé avec succès 🎉
+          Compte créé avec succès
           <br>
           Vérifie ton email pour confirmer ton inscription.
         </div>

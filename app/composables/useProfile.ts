@@ -1,5 +1,7 @@
+import type { Profile } from "~/types/profile"
+
 export const useProfile = () => {
-  return useState(
+  return useState<Profile | null>(
     'profile',
     () => null
   )

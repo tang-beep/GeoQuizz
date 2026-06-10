@@ -1,16 +1,19 @@
 <script setup lang="ts">
-const supabase =
-  useSupabase()
-
+const supabase = useSupabase()
 const user = useAuth()
+const profile = useProfile()
 
-const currentUser =
-  computed(
-    () => user.value
-  )
+const currentUser = computed(
+  () => user.value
+)
 
-const ready =
-  ref(false)
+const username = computed(
+  () =>
+    profile.value?.username ??
+    'Utilisateur'
+)
+
+const ready = ref(false)
 
 onMounted(() => {
   ready.value = true
@@ -18,6 +21,8 @@ onMounted(() => {
 
 async function logout() {
   await supabase.auth.signOut()
+
+  profile.value = null
 
   await navigateTo('/login')
 }
@@ -74,17 +79,13 @@ async function logout() {
         class="flex items-center gap-4"
       >
         <span
-          class="text-zinc-300"
+          class="text-zinc-300 font-medium"
         >
-          {{
-            currentUser.user_metadata
-              ?.username ??
-            currentUser.email
-          }}
+          {{ username }}
         </span>
 
         <button
-          class="rounded-lg bg-red-600 px-3 py-2"
+          class="rounded-lg bg-red-600 px-3 py-2 transition hover:bg-red-500"
           @click="logout"
         >
           Déconnexion

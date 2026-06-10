@@ -1,15 +1,33 @@
 <script setup lang="ts">
-const supabase = useSupabase()
+const supabase =
+  useSupabase()
 
-const user = useAuth()
+const user =
+  useAuth()
 
-const username = ref('')
-const email = computed(
-  () => user.value?.email ?? ''
-)
+const profile =
+  useProfile()
 
-const loading = ref(true)
-const saving = ref(false)
+const username =
+  ref('')
+
+const email =
+  computed(
+    () =>
+      user.value?.email ?? ''
+  )
+
+const loading =
+  ref(true)
+
+const saving =
+  ref(false)
+
+const error =
+  ref('')
+
+const success =
+  ref('')
 
 const stats = ref({
   bestScore: 0,
@@ -24,44 +42,26 @@ onMounted(async () => {
     return
   }
 
-  const [
-    profileResult,
-    statsResult
-  ] = await Promise.all([
-    supabase
-      .from('profiles')
-      .select('username')
-      .eq('id', user.value.id)
-      .single(),
+  username.value =
+    profile.value?.username ?? ''
 
-    supabase
-      .from('game_results')
-      .select(
-        'score, accuracy'
-      )
-      .eq(
-        'user_id',
-        user.value.id
-      )
-  ])
+  const {
+    data: games
+  } = await supabase
+    .from('game_results')
+    .select(
+      'score, accuracy'
+    )
+    .eq(
+      'user_id',
+      user.value.id
+    )
 
-  if (
-    profileResult.data
-  ) {
-    username.value =
-      profileResult.data.username ?? ''
-  }
-
-  if (
-    statsResult.data?.length
-  ) {
-    const games =
-      statsResult.data
-
+  if (games?.length) {
     stats.value = {
       bestScore: Math.max(
         ...games.map(
-          g => g.score
+          game => game.score
         )
       ),
 
@@ -75,7 +75,8 @@ onMounted(async () => {
               sum,
               game
             ) =>
-              sum + game.score,
+              sum +
+              game.score,
             0
           ) / games.length
         ),
@@ -105,26 +106,83 @@ async function saveProfile() {
     return
   }
 
+  error.value = ''
+  success.value = ''
+
+  const pseudo =
+    username.value.trim()
+
+  if (
+    pseudo.length < 3
+  ) {
+    error.value =
+      'Le pseudo doit contenir au moins 3 caractères'
+
+    return
+  }
+
+  if (
+    pseudo.length > 15
+  ) {
+    error.value =
+      'Le pseudo doit contenir au maximum 15 caractères'
+
+    return
+  }
+
   saving.value = true
 
-  const { error } =
-    await supabase
-      .from('profiles')
-      .update({
-        username:
-          username.value.trim()
-      })
-      .eq(
-        'id',
-        user.value.id
-      )
+  const {
+    data: existingUser
+  } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq(
+      'username',
+      pseudo
+    )
+    .neq(
+      'id',
+      user.value.id
+    )
+    .maybeSingle()
 
-  if (error) {
-    alert(error.message)
+  if (existingUser) {
+    error.value =
+      'Ce pseudo est déjà utilisé'
+
+    saving.value = false
+
+    return
+  }
+
+  const {
+    error: updateError
+  } = await supabase
+    .from('profiles')
+    .update({
+      username: pseudo
+    })
+    .eq(
+      'id',
+      user.value.id
+    )
+
+  if (updateError) {
+    error.value =
+      updateError.message
   }
 
   else {
-    alert('Profil sauvegardé')
+    if (profile.value) {
+      profile.value = {
+        ...profile.value,
+        username: pseudo
+      }
+    }
+
+    success.value =
+      'Profil sauvegardé'
   }
 
   saving.value = false
@@ -187,9 +245,30 @@ async function saveProfile() {
 
             <input
               v-model="username"
+              maxlength="15"
               class="w-full rounded-xl bg-zinc-800 p-3"
+            />
+
+            <p
+              class="mt-1 text-xs text-zinc-500"
             >
+              3 à 15 caractères
+            </p>
           </div>
+
+          <p
+            v-if="error"
+            class="text-sm text-red-400"
+          >
+            {{ error }}
+          </p>
+
+          <p
+            v-if="success"
+            class="text-sm text-green-400"
+          >
+            {{ success }}
+          </p>
 
           <button
             class="rounded-xl bg-blue-600 px-5 py-3 font-bold"

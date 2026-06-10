@@ -100,6 +100,15 @@ async function loginWithGoogle() {
           class="w-full rounded-xl bg-zinc-800 p-3"
         >
 
+        <div class="text-right">
+          <NuxtLink
+            to="/forgot-password"
+            class="text-sm text-blue-400 hover:text-blue-300"
+          >
+            Mot de passe oublié ?
+          </NuxtLink>
+        </div>
+
         <p
           v-if="error"
           class="text-sm text-red-400"
