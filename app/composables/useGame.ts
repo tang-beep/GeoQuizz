@@ -434,20 +434,40 @@ export function useGame(
     }
   }
 
+  function getTimeFactor() {
+    switch (targetElements.length) {
+      case 1:
+        return 1
+
+      case 2:
+        return 1.8
+
+      case 3:
+        return 2.6
+
+      case 4:
+        return 3.8
+
+      default:
+        return 1
+    }
+  }
+
   function computeRoundScore() {
+    const factor = getTimeFactor()
     const elapsedSeconds = finalRoundTime.value
     let speedBonus = 20
 
-    if (elapsedSeconds < 3) {
+    if (elapsedSeconds < 3 * factor) {
       speedBonus = 100
     }
-    else if (elapsedSeconds < 7) {
+    else if (elapsedSeconds < 7 * factor) {
       speedBonus = 80
     }
-    else if (elapsedSeconds < 15) {
+    else if (elapsedSeconds < 15 * factor) {
       speedBonus = 60
     }
-    else if (elapsedSeconds < 25) {
+    else if (elapsedSeconds < 25 * factor) {
       speedBonus = 40
     }
 
