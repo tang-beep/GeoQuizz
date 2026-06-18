@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Country } from '../types/country'
+import type { Country } from '../../shared/types/country'
 
 defineProps<{
   country: Country

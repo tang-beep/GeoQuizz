@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Continent } from '~/maps/worldViews'
-import type { GameElement } from '../types/game'
+import type { GameElement } from '../../shared/types/game'
 import {getCountryOptions, getCountryCountLabel } from '~/utils/countriesCount'
 
 const continent =

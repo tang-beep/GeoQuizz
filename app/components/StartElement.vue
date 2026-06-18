@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Country } from '../types/country'
-import type { GameElement } from '../types/game'
+import type { Country } from '../../shared/types/country'
+import type { GameElement } from '../../shared/types/game'
 
 defineProps<{
   country: Country

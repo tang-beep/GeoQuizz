@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Country }
-from '../types/country'
+from '../../shared/types/country'
 
 defineProps<{
   countries: Country[]

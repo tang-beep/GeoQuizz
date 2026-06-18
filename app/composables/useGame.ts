@@ -6,13 +6,13 @@ import {
   ref
 } from 'vue'
 
-import { countries as allCountries } from '../data/countries'
+import { countries as allCountries } from '../../shared/countries'
 
-import type { Country } from '../types/country'
+import type { Country } from '../../shared/types/country'
 import type {
   GameElement,
   GameSettings
-} from '../types/game'
+} from '../../shared/types/game'
 import { distance } from 'fastest-levenshtein'
 
 type TaskState =

@@ -3,7 +3,7 @@ import { worldMap } from '~/maps/world'
 import type {
   GameElement,
   GameSettings
-} from '../types/game'
+} from '../../shared/types/game'
 import { continents, type Continent } from '~/maps/worldViews'
 
 const route = useRoute()

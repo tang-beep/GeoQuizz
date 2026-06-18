@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { GameElement } from '../types/game'
+import type { GameElement } from '../../shared/types/game'
 
 import {
   nextTick,
@@ -10,7 +10,7 @@ import {
 
 import { useMapCamera } from '../composables/useMapCamera'
 import type { MapConfig } from '~/maps/mapConfig';
-import { countries } from '~/data/countries';
+import { countries } from '../../shared/countries';
 import { continentViews, type Continent } from '~/maps/worldViews';
 
 const props = defineProps<{
