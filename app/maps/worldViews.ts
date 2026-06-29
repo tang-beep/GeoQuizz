@@ -1,3 +1,4 @@
+import { Continent } from "../../shared/types/continents";
 import type { MapView } from "./mapConfig";
 
 export const worldView: MapView = {
@@ -5,18 +6,6 @@ export const worldView: MapView = {
   y: 260,
   zoom: 1.1
 }
-
-export const continents = [
-  'europe',
-  'africa',
-  'asia',
-  'northAmerica',
-  'southAmerica',
-  'oceania'
-] as const
-
-export type Continent =
-  (typeof continents)[number]
 
 export const continentViews: 
   Record<Continent, MapView> = {

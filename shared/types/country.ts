@@ -1,4 +1,4 @@
-import type { Continent } from "~/maps/worldViews"
+import { Continent } from "./continents";
 
 export interface Country {
   code: string
